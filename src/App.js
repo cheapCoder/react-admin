@@ -1,13 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { DatePicker, Button } from 'antd';
 
-function App() {
+export default function () {
   return (
     <div>
-      
+      <DatePicker />asdfasdf
+      <Button>click it</Button>
     </div>
   );
 }
 
-export default App;
