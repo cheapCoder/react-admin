@@ -1,3 +1,38 @@
-.loginBackground {
-  background-image:url("./images/BG_A_Default_1.jpg")
+.login {
+	overflow: hidden;
+	&::before { // 背景图片
+		content: "";
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		background-image: url("./images/BG_A_Default_1.jpg");
+		background-size: cover;
+		filter: blur(4px);
+		z-index: -999;
+	}
+	h1 {
+		margin: 10px 30px;
+		color: white;
+		text-shadow: 8px 6px 5px  #000;
+	}
+	h2 {
+		padding: 20px;
+	}
+	.loginForm {
+		text-align: center;
+		width: 500px;
+		height: 300px;
+		margin: auto;
+		margin-top: 160px;
+		background-color: #F3F3F4;
+		opacity: 95%;
+		border-radius: 10px;
+		// z-index: 999;
+		box-shadow: 2px 2px 64px -4px #757b7d;
+	}
+}
+
+.center {
+	margin-top: 10px;
+	margin-left: 30px;
 }
