@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from './containers/Login.jsx'
+import Login from './containers/login/Login.jsx'
 
 export default function () {
   return (

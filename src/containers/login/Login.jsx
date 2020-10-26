@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import {demo} from '../redux/actions/actiondemo';
 
+import {demo} from '../../redux/actions/actiondemo';
+import './login.less'
 
 class Login extends React.Component {
 
@@ -17,8 +18,8 @@ class Login extends React.Component {
   render() {
 
     return (
-      <div>
-        <button onClick={this.handleButton}>click it</button>
+      <div className="loginBackground">
+        adfad
       </div>
     )
   }
