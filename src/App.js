@@ -1,11 +1,10 @@
 import React from 'react';
-import { DatePicker, Button } from 'antd';
+import Login from './containers/Login.jsx'
 
 export default function () {
   return (
     <div>
-      <DatePicker />asdfasdf
-      <Button>click it</Button>
+      <Login />
     </div>
   );
 }
