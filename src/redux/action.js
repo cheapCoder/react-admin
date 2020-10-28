@@ -1,13 +1,6 @@
-import { USER_INFO_ACTION } from "./actionTypes"
+import { USER_MSG_ACTION } from "./actionTypes"
 
 
-export const userInfoAction = (data) => {
-  console.log({
-    type: USER_INFO_ACTION,
-    data
-  });
-  return {
-    type: USER_INFO_ACTION,
-    data
-  }
-};
+export const userInfoAndTokenAction = (data) => ({ type: USER_MSG_ACTION, data });
+
+export const changeIsLogin = (data) => ({ type: "changeIsLogin"});

@@ -1,2 +1,2 @@
 
-export const USER_INFO_ACTION =  "userInfoAction"
+export const USER_MSG_ACTION =  "userAction"

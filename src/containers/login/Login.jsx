@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Form, Input, Button, message } from 'antd';
 
-import { userInfoAction } from '../../redux/action';
-import { reqLogin } from '../../api/index'
 import './login.less'
+import { reqLogin } from '../../api/index'
 import { reqVerifyToken } from "../../api/index"
+import { userInfoAndTokenAction } from '../../redux/action';
 
 
 //表单布局
@@ -23,32 +23,40 @@ const validateRuler = [{ required: true, message: "这是必输项" }, { max: 12
 let isLoginDebounce = false   //用于对登陆请求防抖
 
 // 组件类
-
+@connect(
+  state => ({     //传入用户登录信息
+    isLogin: state.userInfo.isLogin
+  }),
+  { userInfoAndTokenAction }
+)
 class Login extends React.Component {
   componentDidMount() {   //自动登陆
-    // const {history, isLogin} = this.props;
-    // // let isFirst = false;
-    // isLogin && reqVerifyToken().then((res) => {
-    //   // console.log(res);
-    //   if (!res.status) {
-    //     history.replace("/admin");
-    //   }
-    // }).catch(() => {
-      
-    // })
+    // console.log(this.props);
+    const { history, isLogin } = this.props;
+    console.log(isLogin);
+    isLogin || reqVerifyToken().then((res) => {
+      // console.log(res);
+      if (!res.status) {
+        history.replace("/admin");
+      }
+    })
   }
 
-  onFinish = async ({ username, password }) => {    //输入格式正确时提交
+  //输入格式正确时提交
+  onFinish = async ({ username, password }) => {    
     if (!isLoginDebounce) {
       isLoginDebounce = true;
       const result = await reqLogin(username, password);
       isLoginDebounce = false;
       if (!result.status) {
-        console.log(result.data.user, userInfoAction);
-        userInfoAction(result.data.user) //保存user数据到redux
-        // console.log(this.props.);
+        // debugger
+
+        localStorage.setItem("userToken", JSON.stringify(result.data.token));  //保存token,和用户信息到localStorage中
+        localStorage.setItem("userInfo", JSON.stringify(result.data.user));
+
+        this.props.userInfoAndTokenAction(result.data) //保存user数据到redux
+
         this.props.history.push("/admin");
-        localStorage.setItem("userToken", JSON.stringify(result.data.token));  //保存token到localStorage中
       }
     } else {
       message.warn("正在校验身份，请稍等！", 1)
@@ -107,10 +115,4 @@ class Login extends React.Component {
   }
 };
 
-
-export default connect(
-  state => ({
-    isLogin: state.isLogin
-  }),
-  { userInfoAction }
-)(Login)
+export default Login

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Link, Redirect,Switch } from "react-router-dom";
+import { BrowserRouter, Route, Redirect,Switch } from "react-router-dom";
 
 import Login from './containers/Login/Login.jsx'
 import Admin from './containers/Admin/Admin.jsx'
