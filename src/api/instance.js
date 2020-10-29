@@ -28,7 +28,7 @@ instance.interceptors.request.use((config) => {
   }
 
   if (config.url !== "/login" && config.url !== "/manage/img/upload") {  //  统一添加token
-    const token = store.getState().userInfo.token || JSON.parse(localStorage.getItem('userToken')) || "";
+    const token = store.getState().user.token || JSON.parse(localStorage.getItem('userToken')) || "";
     // if (token) {
     config.headers.Authorization = "atguigu_" + token;
     // } else {
@@ -56,7 +56,6 @@ instance.interceptors.response.use((res) => {
   NProgress.done()
 
   if (err.message === "Request failed with status code 401") {  //token验证不通过
-    // localStorage.clear();
     localStorage.removeItem("userToken");
     localStorage.removeItem("userInfo");
 

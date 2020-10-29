@@ -1,11 +1,11 @@
+import { Button, Form, Input, message } from 'antd';
 import React from 'react';
-import { connect } from 'react-redux'
-import { Form, Input, Button, message } from 'antd';
+import { connect } from 'react-redux';
 
-import './login.less'
-import { reqLogin } from '../../api/index'
-import { reqVerifyToken } from "../../api/index"
-import { userInfoAndTokenAction } from '../../redux/action';
+import { reqLogin, reqVerifyToken } from '../../api/index';
+import { saveUserAction } from "../../redux/action"
+import './login.less';
+
 
 
 //表单布局
@@ -25,17 +25,15 @@ let isLoginDebounce = false   //用于对登陆请求防抖
 // 组件类
 @connect(
   state => ({     //传入用户登录信息
-    isLogin: state.userInfo.isLogin
+    isLogin: state.user.isLogin
   }),
-  { userInfoAndTokenAction }
+  { saveUserAction }
 )
 class Login extends React.Component {
   componentDidMount() {   //自动登陆
-    // console.log(this.props);
     const { history, isLogin } = this.props;
-    console.log(isLogin);
     isLogin || reqVerifyToken().then((res) => {
-      // console.log(res);
+      console.log(res);
       if (!res.status) {
         history.replace("/admin");
       }
@@ -43,18 +41,17 @@ class Login extends React.Component {
   }
 
   //输入格式正确时提交
-  onFinish = async ({ username, password }) => {    
+  onFinish = async ({ username, password }) => {
     if (!isLoginDebounce) {
       isLoginDebounce = true;
       const result = await reqLogin(username, password);
       isLoginDebounce = false;
       if (!result.status) {
         // debugger
-
         localStorage.setItem("userToken", JSON.stringify(result.data.token));  //保存token,和用户信息到localStorage中
         localStorage.setItem("userInfo", JSON.stringify(result.data.user));
 
-        this.props.userInfoAndTokenAction(result.data) //保存user数据到redux
+        this.props.saveUserAction(result.data) //保存user数据到redux
 
         this.props.history.push("/admin");
       }
@@ -63,7 +60,7 @@ class Login extends React.Component {
     }
   };
 
-  onFinishFailed = (errorInfo) => { message.error('输入有误，请重新输入', 1); };
+  onFinishFailed = () => { message.error('输入有误，请重新输入', 1); };
   render() {
 
     return (
@@ -90,7 +87,6 @@ class Login extends React.Component {
             </Form.Item>
 
             <Form.Item
-
               className="center"
               label="密码"
               name="password"
@@ -107,9 +103,7 @@ class Login extends React.Component {
         </Button>
             </Form.Item>
           </Form>
-
         </article>
-
       </div>
     )
   }

@@ -1,6 +1,9 @@
-import { USER_MSG_ACTION } from "./actionTypes"
+import { CHANGE_ISLOGIN_action, DELETE_USER_ACTION, SAVE_USER_ACTION } from "./actionTypes";
 
 
-export const userInfoAndTokenAction = (data) => ({ type: USER_MSG_ACTION, data });
 
-export const changeIsLogin = (data) => ({ type: "changeIsLogin"});
+export const saveUserAction = (data) => ({ type: SAVE_USER_ACTION, data });
+
+export const changeIsLogin = () => ({ type: CHANGE_ISLOGIN_action});
+
+export const deleteUserAction = () => ({ type: DELETE_USER_ACTION});
