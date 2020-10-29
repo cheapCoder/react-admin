@@ -33,7 +33,6 @@ class Login extends React.Component {
   componentDidMount() {   //自动登陆
     const { history, isLogin } = this.props;
     isLogin || reqVerifyToken().then((res) => {
-      console.log(res);
       if (!res.status) {
         history.replace("/admin");
       }

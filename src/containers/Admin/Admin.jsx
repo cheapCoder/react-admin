@@ -29,7 +29,7 @@ z
   }
 
   render() {
-    const {  Content, Footer } = Layout;
+    const {  Footer } = Layout;
     return (
       <Layout className="admin" >
        <MySider/>

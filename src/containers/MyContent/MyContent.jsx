@@ -12,7 +12,7 @@ class MyContent extends Component {
     return (
         <Card 
         title="Default size card" 
-        extra={<a href="#">More</a>} 
+        extra={<a href="#3">More</a>} 
         className="content"
         >
           <p>Card content</p>

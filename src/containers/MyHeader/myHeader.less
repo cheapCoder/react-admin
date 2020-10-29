@@ -16,26 +16,41 @@
 		font: bold 45px Arial, sans-serif;
 		color: #393d69;
 	}
+
 	ul {
 		position: absolute;
 		right: 50px;
 		margin: auto 20px;
 		li {
-      display: flex;
-      flex-direction: row-reverse;
+			display: flex;
+			flex-direction: row-reverse;
 			padding: 5px;
 			.name {
-        font: bold 20px  cursive;
-        color: #002140;
+				font: bold 20px cursive;
+				color: #002140;
 				vertical-align: bottom;
-        margin-left: 10px;
-      }
-      &:nth-child(2) {
-        font-family:  Cursive      ;
-        font-weight: 100;
-        font-style: italic;
-        color: #393d69;
-      }
+				margin-left: 10px;
+			}
+			&:nth-child(2) {
+				font-family: Cursive;
+				font-weight: 100;
+				font-style: italic;
+				color: #393d69;
+			}
 		}
+	}
+
+	.fullScreen {
+		z-index: 999;
+		position: absolute;
+		padding: 0;
+		right: 10px;
+		top: 10px;
+		:first-child {
+			display: inline-block;
+			width: 3vw;
+			height: 3vh;
+		}
+		
 	}
 }

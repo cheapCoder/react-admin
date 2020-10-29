@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Avatar, Button, Modal } from "antd"
-import { SmileTwoTone, HeartTwoTone, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
+import { SmileTwoTone, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs'
 import { withRouter } from 'react-router'
+import screenfull from "screenfull"
 
 
 import './myHeader.less'
@@ -19,7 +20,8 @@ const { confirm } = Modal;
 @withRouter
 class MyHeader extends Component {
   state = {
-    nowTime: dayjs().format("D MMMM YYYY, h:mm a")
+    nowTime: dayjs().format("D MMMM YYYY, h:mm a"),
+    isFullscreen: screenfull.isFullscreen,
   }
 
   handleQuit = () => {
@@ -33,7 +35,7 @@ class MyHeader extends Component {
       okText: "退出登录",
       cancelText: "确定",
       icon: <SmileTwoTone />,
-      content: <div style={{ textAlign: "left", font: "bold 16px Arial",verticalAlign:"middle" }}>hi {that.props.user.userInfo.username}</div>,
+      content: <div style={{ textAlign: "left", font: "bold 16px Arial", verticalAlign: "middle" }}>hi {that.props.user.userInfo.username}</div>,
       onOk() {
         Modal.destroyAll();
         localStorage.clear();     //清除localstorage保存的信息
@@ -42,24 +44,40 @@ class MyHeader extends Component {
       },
     });
   }
-    
+
+  handleFullScreen = () => {
+    console.log(screenfull.isFullscreen);
+    if (screenfull.isEnabled) {
+      screenfull.toggle().then(() => {
+        console.log(screenfull.isFullscreen);
+        this.setState({ isFullscreen: screenfull.isFullscreen })
+      });
+    }
+  }
+
   componentDidMount() {
+    console.log(screenfull.isFullscreen);
     this.timeId = setInterval(() => {     //头部日期显示计时器
       this.setState({
         nowTime: dayjs().format("D MMMM YYYY, h:mm a")
       })
     }, 30000)
 
-    
+    if (screenfull.isEnabled) {
+      screenfull.on('change', () => {    // 全屏按钮监听, 解决全屏时用esc退出全屏状态不改变的bug
+        this.setState({ isFullscreen: screenfull.isFullscreen })
+      });
+    }
   }
 
   componentWillUnmount() {
+
     this.timeId && clearInterval(this.timeId)
+    screenfull.off('change');
   }
 
 
   render() {
-    const fullScreen = true ? FullscreenOutlined : FullscreenExitOutlined;
 
     return (<div className="header">
       <header>next one</header>
@@ -73,7 +91,11 @@ class MyHeader extends Component {
         <li>{this.state.nowTime}</li>
         {/* <li>weather</li> */}
       </ul>
-      <fullScreen />
+      <Button type="link" className="fullScreen" onClick={this.handleFullScreen}>
+        {this.state.isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+      </Button>
+
+
     </div>);
   }
 }

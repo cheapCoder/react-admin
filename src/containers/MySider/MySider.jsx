@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import { Menu, Layout } from 'antd'
+
 
 import reactLogo from "./images/react.png"
 import './sider.less'
+import menu from './js/menu-config'
+
+const { SubMenu, Item } = Menu;
 
 class MySider extends Component {
   state = {
@@ -20,17 +24,12 @@ class MySider extends Component {
     });
   }
 
-  handleClick = e => {
-    console.log('click ', e);
-  };
-
 
   render() {
     const { collapsed } = this.state
-    const { SubMenu } = Menu;
-    
+
     return (<Layout.Sider
-      breakpoint="lg"
+      // breakpoint="lg"
       collapsedWidth="80"
       collapsible
       collapsed={collapsed}
@@ -45,55 +44,37 @@ class MySider extends Component {
       <span className="name" ref={(ref) => this.systemName = ref}>后台管理系统</span>
 
       <Menu
-        onClick={this.handleClick}
-        // style={{ width: 256 }}
+        // onClick={this.handleClick}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
       >
-        <SubMenu
-          key="sub1"
-          title={
-            <span>
-              <MailOutlined />
-              <span>Navigation One</span>
-            </span>
-          }
-        >
-          <Menu.ItemGroup key="g1" title="Item 1">
-            <Menu.Item key="1">Option 1</Menu.Item>
-            <Menu.Item key="2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup key="g2" title="Item 2">
-            <Menu.Item key="3">Option 3</Menu.Item>
-            <Menu.Item key="4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-          <Menu.Item key="5">Option 5</Menu.Item>
-          <Menu.Item key="6">Option 6</Menu.Item>
-          <SubMenu key="sub3" title="Submenu">
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-        </SubMenu>
-        <SubMenu
-          key="sub4"
-          title={
-            <span>
-              <SettingOutlined />
-              <span>Navigation Three</span>
-            </span>
-          }
-        >
-          <Menu.Item key="9">Option 9</Menu.Item>
-          <Menu.Item key="10">Option 10</Menu.Item>
-          <Menu.Item key="11">Option 11</Menu.Item>
-          <Menu.Item key="12">Option 12</Menu.Item>
-        </SubMenu>
+        {recurMenu(menu)}
       </Menu>
     </Layout.Sider>);
   }
+}
+
+// 递归数组返回菜单
+function recurMenu(MenuArr) {
+  return MenuArr.map((item, index) => {
+    let { children, title, key, icon: Icon } = item;
+    // Icon = Icon.replace(/^\S/, s => s.toUpperCase());
+    console.log(Icon);
+    if (!children) {    //没有children则为叶级菜单
+      return React.createElement(Item, {
+        icon: React.createElement(Icon),
+        key,
+      }, title)
+      // return <Item icon={<Icon />} key={key}>{title}</Item>
+    } else {
+      // return <SubMenu key={key} icon={<Icon />} title={title}>
+      //   {recurMenu(children)}
+      // </SubMenu>
+      return React.createElement(SubMenu, { key, icon: React.createElement(Icon), title }, recurMenu(children))
+
+    }
+  })
 }
 
 export default MySider;
