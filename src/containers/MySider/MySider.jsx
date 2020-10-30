@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Icon from '@ant-design/icons';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Menu, Layout } from 'antd'
 
 
@@ -58,20 +58,20 @@ class MySider extends Component {
 // 递归数组返回菜单
 function recurMenu(MenuArr) {
   return MenuArr.map((item, index) => {
-    let { children, title, key, icon: Icon } = item;
+    let { children, title, key, icon } = item;
     // Icon = Icon.replace(/^\S/, s => s.toUpperCase());
-    console.log(Icon);
+    // console.log(Icon);
     if (!children) {    //没有children则为叶级菜单
-      return React.createElement(Item, {
-        icon: React.createElement(Icon),
-        key,
-      }, title)
-      // return <Item icon={<Icon />} key={key}>{title}</Item>
+      // return React.createElement(Item, {
+      //   icon: React.createElement(Icon[iconType]),
+      //   key,
+      // }, title)
+      return <Item icon={<LegacyIcon type={icon} />} key={key}>{title}</Item>
     } else {
-      // return <SubMenu key={key} icon={<Icon />} title={title}>
-      //   {recurMenu(children)}
-      // </SubMenu>
-      return React.createElement(SubMenu, { key, icon: React.createElement(Icon), title }, recurMenu(children))
+      return <SubMenu key={key} icon={<LegacyIcon type={icon} />} title={title}>
+        {recurMenu(children)}
+      </SubMenu>
+      // return React.createElement(SubMenu, { key, icon: React.createElement(Icon[iconType]), title }, recurMenu(children))
 
     }
   })
