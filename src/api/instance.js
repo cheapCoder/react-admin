@@ -9,6 +9,7 @@ import store from '../redux/store'
 
 const instance = axios.create({
   baseURL: BASE_URL,
+  // timeout: 5000
 })
 
 // 拦截器
@@ -42,7 +43,7 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use((res) => {
   NProgress.done()
-  const {data, status, msg} = res.data
+  const { data, status, msg } = res.data
 
   if (status) {           //统一处理请求成功但后台拒绝的情况
     message.error(msg, 1)
@@ -54,8 +55,8 @@ instance.interceptors.response.use((res) => {
 
 }, (err) => {
   NProgress.done()
-
-  if (err.message === "Request failed with status code 401") {  //token验证不通过
+  // if (err.message === "Request failed with status code 401" || "Request failed with status code 500") {  //token验证不通过或后台无响应
+  if (err.message === "Request failed with status code 401") {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userInfo");
 

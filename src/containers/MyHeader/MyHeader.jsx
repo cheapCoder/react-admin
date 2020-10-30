@@ -56,7 +56,6 @@ class MyHeader extends Component {
   }
 
   componentDidMount() {
-    console.log(screenfull.isFullscreen);
     this.timeId = setInterval(() => {     //头部日期显示计时器
       this.setState({
         nowTime: dayjs().format("D MMMM YYYY, h:mm a")
@@ -92,7 +91,7 @@ class MyHeader extends Component {
         {/* <li>weather</li> */}
       </ul>
       <Button type="link" className="fullScreen" onClick={this.handleFullScreen}>
-        {this.state.isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+        {this.state.isFullscreen ? <FullscreenExitOutlined spin/> : <FullscreenOutlined spin/>}
       </Button>
 
 

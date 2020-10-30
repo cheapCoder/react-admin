@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { message, Layout } from 'antd'
+import { Switch, Route, Redirect } from 'react-router'
 
 import MySider from "../MySider/MySider"
 import MyHeader from '../MyHeader/MyHeader'
-import MyContent from '../MyContent/MyContent'
+import Home from '../Home/Home'
+import Category from '../Category/Category'
+import Product from '../Product/Product'
+import User from '../User/User'
+import Role from '../Role/Role'
+import Bar from '../Bar/Bar'
+import Line from '../Line/Line'
+import Pie from '../Pie/Pie'
+
 
 import './Admin.less'
 import { reqVerifyToken } from "../../api/index"
@@ -14,7 +23,7 @@ import { changeIsLogin } from '../../redux/action';
 
 @connect(state => ({ user: state.user }), { changeIsLogin })
 class Admin extends Component {
-z
+
 
   componentDidMount() {
     const { user, history, changeIsLogin } = this.props
@@ -29,14 +38,27 @@ z
   }
 
   render() {
-    const {  Footer } = Layout;
+    const { Footer } = Layout;
     return (
       <Layout className="admin" >
-       <MySider/>
+        <MySider />
         <Layout className="admin-main" >
-          <MyHeader/>
-          <MyContent/>
-          <Footer style={{ textAlign: 'center',backgroundColor:"skyblue" }}>developed by cheapCoder</Footer>
+          <MyHeader />
+          <div className="admin-content">
+            <Switch >
+              <Route path="/admin/home" component={Home} />
+              <Route path="/admin/prod_about/category" component={Category} />
+              <Route path="/admin/prod_about/product" component={Product} />
+              <Route path="/admin/user" component={User} />
+              <Route path="/admin/role" component={Role} />
+              <Route path="/admin/charts/pie" component={Pie} />
+              <Route path="/admin/charts/line" component={Line} />
+              <Route path="/admin/charts/bar" component={Bar} />
+              <Redirect to="/admin/home" />
+            </Switch>
+          </div>
+
+          <Footer className="footer">developed by cheapCoder</Footer>
         </Layout>
       </Layout>
     )

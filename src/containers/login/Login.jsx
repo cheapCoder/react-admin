@@ -45,14 +45,14 @@ class Login extends React.Component {
       isLoginDebounce = true;
       const result = await reqLogin(username, password);
       isLoginDebounce = false;
-      if (!result.status) {
+      if (!result.status) {   //登陆请求成功
         // debugger
         localStorage.setItem("userToken", JSON.stringify(result.data.token));  //保存token,和用户信息到localStorage中
         localStorage.setItem("userInfo", JSON.stringify(result.data.user));
 
         this.props.saveUserAction(result.data) //保存user数据到redux
 
-        this.props.history.push("/admin");
+        this.props.history.push("/admin");  //  路由跳转
       }
     } else {
       message.warn("正在校验身份，请稍等！", 1)
