@@ -23,11 +23,15 @@ import { changeIsLogin } from '../../redux/action';
 
 @connect(state => ({ user: state.user }), { changeIsLogin })
 class Admin extends Component {
-
+  state = {
+    headerName: ""
+  }
 
   componentDidMount() {
     const { user, history, changeIsLogin } = this.props
-    user.isLogin || reqVerifyToken().then(({ status, data, err }) => {      //验证用户身份
+
+    //验证用户身份
+    user.isLogin || reqVerifyToken().then(({ status }) => {
       if (status) {   //用户信息检查
         message.error("身份信息失效，请重新登陆！", 1);     //网络请求失败
         history.replace("/login");
@@ -35,15 +39,22 @@ class Admin extends Component {
         changeIsLogin() //单独修改isLogin为true
       }
     })
+
+  }
+
+  setHeaderName = (newName) => {
+    console.log(newName);
+    this.setState({ headerName: newName })
   }
 
   render() {
     const { Footer } = Layout;
+    // console.log(this.props.location.pathname);
     return (
       <Layout className="admin" >
-        <MySider />
+        <MySider pathname={this.props.location.pathname} setHeaderName={this.setHeaderName} />
         <Layout className="admin-main" >
-          <MyHeader />
+          <MyHeader headerName={this.state.headerName} />
           <div className="admin-content">
             <Switch >
               <Route path="/admin/home" component={Home} />

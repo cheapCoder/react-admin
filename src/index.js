@@ -13,3 +13,8 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+// 启动热膜替换
+if(module.hot) {
+  module.hot.accept();
+}

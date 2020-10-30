@@ -46,10 +46,8 @@ class MyHeader extends Component {
   }
 
   handleFullScreen = () => {
-    console.log(screenfull.isFullscreen);
     if (screenfull.isEnabled) {
       screenfull.toggle().then(() => {
-        console.log(screenfull.isFullscreen);
         this.setState({ isFullscreen: screenfull.isFullscreen })
       });
     }
@@ -77,9 +75,9 @@ class MyHeader extends Component {
 
 
   render() {
-
+    // console.log(this.props);
     return (<div className="header">
-      <header>next one</header>
+      <header>{this.props.headerName}</header>
       <nav></nav>
       <ul>
         <li>
@@ -93,7 +91,6 @@ class MyHeader extends Component {
       <Button type="link" className="fullScreen" onClick={this.handleFullScreen}>
         {this.state.isFullscreen ? <FullscreenExitOutlined spin/> : <FullscreenOutlined spin/>}
       </Button>
-
 
     </div>);
   }
