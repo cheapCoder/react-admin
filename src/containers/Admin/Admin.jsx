@@ -1,34 +1,36 @@
+import { Layout, message } from 'antd';
 import React, { Component } from 'react';
-import { connect } from "react-redux"
-import { message, Layout } from 'antd'
-import { Switch, Route, Redirect } from 'react-router'
+import { connect } from "react-redux";
+import { Redirect, Route, Switch } from 'react-router';
 
-import MySider from "../MySider/MySider"
-import MyHeader from '../MyHeader/MyHeader'
-import Home from '../Home/Home'
-import Category from '../Category/Category'
-import Product from '../Product/Product'
-import User from '../User/User'
-import Role from '../Role/Role'
-import Bar from '../Bar/Bar'
-import Line from '../Line/Line'
-import Pie from '../Pie/Pie'
+import MyHeader from '../MyHeader/MyHeader';
+import MySider from "../MySider/MySider";
 
+import Home from '../Home/Home';
+import Category from '../Category/Category';
+import Product from '../Product/Product';
+import User from '../User/User';
+import Role from '../Role/Role';
+import Bar from '../Bar/Bar';
+import Line from '../Line/Line';
+import Pie from '../Pie/Pie';
 
-import './Admin.less'
-import { reqVerifyToken } from "../../api/index"
-import { changeIsLogin } from '../../redux/action';
-
+import './Admin.less';
+import { reqCategoryList, reqVerifyToken } from "../../api/index";
+import { changeIsLoginAction, saveCategoryAction } from '../../redux/action'
 
 
-@connect(state => ({ user: state.user }), { changeIsLogin })
+
+
+
+@connect(state => ({ user: state.user }), { changeIsLoginAction, saveCategoryAction })
 class Admin extends Component {
   state = {
     headerName: ""
   }
 
   componentDidMount() {
-    const { user, history, changeIsLogin } = this.props
+    const { user, history, changeIsLoginAction, saveCategoryAction } = this.props
 
     //验证用户身份
     user.isLogin || reqVerifyToken().then(({ status }) => {
@@ -36,20 +38,26 @@ class Admin extends Component {
         message.error("身份信息失效，请重新登陆！", 1);     //网络请求失败
         history.replace("/login");
       } else {
-        changeIsLogin() //单独修改isLogin为true
+        changeIsLoginAction() //单独修改isLogin为true
       }
+    })
+
+    // 提前获取分类列表，并保存到redux中
+    reqCategoryList().then((res) => {
+      saveCategoryAction(res.data);   //保存到redux
     })
 
   }
 
+
+
   setHeaderName = (newName) => {
-    console.log(newName);
     this.setState({ headerName: newName })
   }
 
   render() {
     const { Footer } = Layout;
-    // console.log(this.props.location.pathname);
+
     return (
       <Layout className="admin" >
         <MySider pathname={this.props.location.pathname} setHeaderName={this.setHeaderName} />

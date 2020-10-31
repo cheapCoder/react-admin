@@ -1,14 +1,236 @@
-import React, { Component } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { connect } from "react-redux"
+import { Table, Input, Button, Popconfirm, Form, Modal } from 'antd';
+import { createFromIconfontCN, QuestionCircleOutlined } from '@ant-design/icons';
+
+import { addCategoryList, reqCategoryList, updateCategoryList } from '../../api/index'
+import { saveCategoryAction } from '../../redux/action'
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_2170307_j02yrol4sjl.js',
+});
+
+const EditableContext = React.createContext();
+
+const EditableRow = ({ index, ...props }) => {
+  const [form] = Form.useForm();
+  return (
+    <Form form={form} component={false}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} />
+      </EditableContext.Provider>
+    </Form>
+  );
+};
+
+const EditableCell = ({
+  title,
+  editable,
+  children,
+  dataIndex,
+  record,
+  handleSave,
+  ...restProps
+}) => {
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef();
+  const form = useContext(EditableContext);
+  useEffect(() => {
+    if (editing) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+    form.setFieldsValue({
+      [dataIndex]: record[dataIndex],
+    });
+  };
+
+  const save = async (e) => {
+    try {
+      const values = await form.validateFields();
+      toggleEdit();
+      handleSave({ ...record, ...values });
+    } catch (errInfo) {
+      // console.log('Save failed:', errInfo);
+    }
+  };
+
+  let childNode = children;
+
+  if (editable) {
+    childNode = editing ? (
+      <Form.Item
+        style={{
+          margin: 0,
+        }}
+        name={dataIndex}
+        rules={[
+          {
+            required: true,
+            message: `${title} is required.`,
+          },
+        ]}
+      >
+        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+      </Form.Item>
+    ) : (
+        <div
+          className="editable-cell-value-wrap"
+          style={{
+            paddingRight: 24,
+          }}
+          onClick={toggleEdit}
+        >
+          {children}
+        </div>
+      );
+  }
+
+  return <td {...restProps}>{childNode}</td>;
+};
 
 
-export default class  extends Component {
-  state = {}
 
+
+@connect(state => ({ category: state.category }), { saveCategoryAction })
+class Category extends React.Component {
+  state = {
+    ModalOkText: "",
+    visible: false,
+    confirmLoading: false,
+  }
+
+  columns = [
+    {
+      title: '分类名  (点击修改)',
+      dataIndex: 'name',
+      width: '50%',
+      editable: true,
+      align: "center",
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      align: "center",
+      render: (text, record) => {
+        // console.log(text, record);
+        return this.props.category.length >= 1 ? (
+          <Popconfirm title="删除后不可恢复，确认删除？" icon={<QuestionCircleOutlined style={{ color: 'red' }} />} okText="确定" cancelText="算了算了" okButtonProps={{ "danger": true }} onConfirm={() => {
+            Modal.warning({
+              content: 'haha，你被骗了，分类不应该删除哦:>',
+            })
+          }}>
+            <Button type="link">删除分类</Button>
+          </Popconfirm >
+        ) : null
+      }
+    }
+  ]
+
+
+  //添加分类
+  handleAddOk = () => {
+    this.setState({
+      ModalOkText: '正在添加...',
+      confirmLoading: true,
+    })
+    addCategoryList(this.categoryInput.state.value.trim()).then((res) => {  //发送请求
+      this.setState({
+        visible: false,
+        confirmLoading: false,
+        ModalOkText: "",
+      });
+      this.categoryInput.state.value = ""
+      res.data && this.props.saveCategoryAction([res.data]);   //保存新数据到redux
+
+    })
+  };
+  // 取消添加分类
+  handleAddCancel = () => {
+    this.setState({
+      visible: false,
+    });
+    this.categoryInput.state.value = ""
+  };
+
+
+
+  handleSave = (row) => {
+    const newData = [...this.state.dataSource];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, ...row });
+    this.setState({
+      dataSource: newData,
+    });
+  };
 
 
   render() {
+    const { visible, confirmLoading, ModalOkText } = this.state;
+    const { category } = this.props;
+    const components = {
+      body: {
+        row: EditableRow,
+        cell: EditableCell,
+      },
+    };
+    const columns = this.columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: (record) => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: this.handleSave,
+        }),
+      };
+    });
+    // console.log(columns);
+
     return (
-       <div>category</div>    
+      <div>
+        <Button
+          onClick={() => { this.setState({ visible: true }) }}
+          type="primary"
+          style={{
+            marginBottom: 16,
+            borderRadius: 15,
+          }}
+        ><IconFont type="icon-titlebar_ic_add" />
+          添加分类
+        </Button>
+        <Modal
+          title="添加分类"
+          visible={visible}
+          onOk={this.handleAddOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleAddCancel}
+          okText={ModalOkText || "确认"}
+          cancelText="取消"
+        >
+          <Input placeholder="请输入类名" ref={ref => this.categoryInput = ref} />
+        </Modal>
+        <Table
+          rowKey="_id"
+          components={components}
+          rowClassName='editable-row'
+          bordered
+          dataSource={category.reverse()}
+          columns={columns}
+          pagination={{ defaultPageSize: 5, hideOnSinglePage: true, }}
+          loading={false}
+        />
+      </div>
     );
   }
 }
+
+export default Category;

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 
-export default  class  extends Component {
-  state = {  }
-  render() { 
-    return ( <div>
+class Role extends Component {
+  state = {}
+  render() {
+    return (<div>
       role
-    </div> );
+    </div>);
   }
 }
- 
+
+export default Role
+

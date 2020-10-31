@@ -56,7 +56,7 @@ instance.interceptors.response.use((res) => {
 }, (err) => {
   NProgress.done()
   // if (err.message === "Request failed with status code 401" || "Request failed with status code 500") {  //token验证不通过或后台无响应
-  if (err.message === "Request failed with status code 401") {
+  if (err.message === "Request failed with status code 401") {    //用户token验证不通过
     localStorage.removeItem("userToken");
     localStorage.removeItem("userInfo");
 

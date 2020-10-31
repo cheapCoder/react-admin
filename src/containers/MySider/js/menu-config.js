@@ -1,4 +1,4 @@
-export default [
+const menu = [
   {
     title: '首页', // 菜单标题名称
     key: 'home', // 对应的path
@@ -57,10 +57,11 @@ export default [
       },
       {
         title: '饼图',
-        key:  'pie',
+        key: 'pie',
         icon: 'pie-chart',
         path: '/admin/charts/pie'
       },
     ]
   },
-]
+] 
+export default menu;

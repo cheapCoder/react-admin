@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { CHANGE_ISLOGIN_action, SAVE_USER_ACTION, DELETE_USER_ACTION } from './actionTypes';
+import { CHANGE_ISLOGIN_ACTION, SAVE_USER_ACTION, DELETE_USER_ACTION, SAVE_CATEGORY_ACTION } from './actionTypes';
 
 
 
-
+//用户登录模块
 const initialUser = {
   // isLogin: JSON.parse(localStorage.getItem("userToken")) !== null,    // 即使有token也有可能过期了，所以默认设置为false，使admin首次渲染时都发送check_token请求，并在验证通过够使用单独一个action单独修改isLogin为true
   isLogin: false,
@@ -20,7 +20,7 @@ function userReducer(state = initialUser, action) {
       isLogin: true,
     };
 
-    case CHANGE_ISLOGIN_action: return {
+    case CHANGE_ISLOGIN_ACTION: return {
       ...state,
       isLogin: true,
     };
@@ -35,11 +35,21 @@ function userReducer(state = initialUser, action) {
 }
 
 
+// 分类列表
+const initailCategory = [];
+function categoryReducer(state = initailCategory, { type, data }) {
+  switch (type) {
 
+    case SAVE_CATEGORY_ACTION: return [...state, ...data];
+
+    default: return state;
+  }
+}
 
 
 export default combineReducers({
   user: userReducer,
+  category: categoryReducer
 })
 
 
