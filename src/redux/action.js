@@ -1,4 +1,4 @@
-import { CHANGE_ISLOGIN_ACTION, DELETE_USER_ACTION, SAVE_USER_ACTION, SAVE_CATEGORY_ACTION } from "./actionTypes";
+import { CHANGE_ISLOGIN_ACTION, DELETE_USER_ACTION, SAVE_USER_ACTION, SAVE_CATEGORY_ACTION, CHANGE_CATEGORY_ACTION } from "./actionTypes";
 
 
 
@@ -9,3 +9,5 @@ export const changeIsLoginAction = () => ({ type: CHANGE_ISLOGIN_ACTION});
 export const deleteUserAction = () => ({ type: DELETE_USER_ACTION});
 
 export const saveCategoryAction = (data) => ({type: SAVE_CATEGORY_ACTION, data})
+
+export const changeCategoryAction = (data) => ({type: CHANGE_CATEGORY_ACTION, data})

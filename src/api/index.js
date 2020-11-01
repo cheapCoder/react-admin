@@ -14,7 +14,7 @@ export const reqVerifyToken = () => instance.post("/check_token")
 export const reqCategoryList = () => instance.get("/manage/category/list");
 
 // 添加分类列表
-export const addCategoryList = (categoryName) => instance.post("manage/category/add", { categoryName });
+export const addCategoryList = (categoryName) => instance.post("/manage/category/add", { categoryName });
 
 // 更改分类列表
 export const updateCategoryList = (categoryId, categoryName) => instance.post("/manage/category/update", { categoryId, categoryName });

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { CHANGE_ISLOGIN_ACTION, SAVE_USER_ACTION, DELETE_USER_ACTION, SAVE_CATEGORY_ACTION } from './actionTypes';
+import { CHANGE_ISLOGIN_ACTION, SAVE_USER_ACTION, DELETE_USER_ACTION, SAVE_CATEGORY_ACTION, CHANGE_CATEGORY_ACTION } from './actionTypes';
 
 
 
@@ -41,6 +41,12 @@ function categoryReducer(state = initailCategory, { type, data }) {
   switch (type) {
 
     case SAVE_CATEGORY_ACTION: return [...state, ...data];
+
+    case CHANGE_CATEGORY_ACTION: {
+      let arr = [...state];
+      arr.splice(state.findIndex((item => item._id === data._id)), 1, data)
+      return arr
+    }
 
     default: return state;
   }

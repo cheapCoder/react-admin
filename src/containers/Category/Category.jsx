@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { connect } from "react-redux"
+import { connect, useSelector, useDispatch } from "react-redux"
 import { Table, Input, Button, Popconfirm, Form, Modal } from 'antd';
 import { createFromIconfontCN, QuestionCircleOutlined } from '@ant-design/icons';
 
 import { addCategoryList, reqCategoryList, updateCategoryList } from '../../api/index'
-import { saveCategoryAction } from '../../redux/action'
+import { saveCategoryAction, changeCategoryAction } from '../../redux/action'
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2170307_j02yrol4sjl.js',
@@ -12,6 +12,8 @@ const IconFont = createFromIconfontCN({
 
 const EditableContext = React.createContext();
 
+
+// 行属性
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -23,18 +25,13 @@ const EditableRow = ({ index, ...props }) => {
   );
 };
 
-const EditableCell = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) => {
+
+// 单元格属性
+const EditableCell = ({ title, editable, children, dataIndex, record, handleSave, ...restProps }) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef();
   const form = useContext(EditableContext);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (editing) {
       inputRef.current.focus();
@@ -50,11 +47,17 @@ const EditableCell = ({
 
   const save = async (e) => {
     try {
+
       const values = await form.validateFields();
+      console.log(record._id);
+      await updateCategoryList(record._id, values.name)  //请求更新分类列表
+      dispatch(changeCategoryAction({ _id: record._id, name: values.name }))    //分发修改redux的category的action
       toggleEdit();
       handleSave({ ...record, ...values });
+
+
     } catch (errInfo) {
-      // console.log('Save failed:', errInfo);
+      console.log('Save failed:', errInfo);
     }
   };
 
@@ -63,32 +66,18 @@ const EditableCell = ({
   if (editable) {
     childNode = editing ? (
       <Form.Item
-        style={{
-          margin: 0,
-        }}
         name={dataIndex}
         rules={[
           {
             required: true,
             message: `${title} is required.`,
-          },
-        ]}
-      >
+          },]} >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
-    ) : (
-        <div
-          className="editable-cell-value-wrap"
-          style={{
-            paddingRight: 24,
-          }}
-          onClick={toggleEdit}
-        >
-          {children}
-        </div>
-      );
+    ) : (<div className="editable-cell-value-wrap" style={{ paddingRight: 24, }} onClick={toggleEdit}>
+      {children}
+    </div>);
   }
-
   return <td {...restProps}>{childNode}</td>;
 };
 
@@ -130,7 +119,6 @@ class Category extends React.Component {
     }
   ]
 
-
   //添加分类
   handleAddOk = () => {
     this.setState({
@@ -145,7 +133,6 @@ class Category extends React.Component {
       });
       this.categoryInput.state.value = ""
       res.data && this.props.saveCategoryAction([res.data]);   //保存新数据到redux
-
     })
   };
   // 取消添加分类
@@ -156,22 +143,20 @@ class Category extends React.Component {
     this.categoryInput.state.value = ""
   };
 
-
-
-  handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, { ...item, ...row });
-    this.setState({
-      dataSource: newData,
-    });
+  handleSave = (row) => {   //保存新数据到redux
+    // const newData = [...this.state.dataSource];
+    // const index = newData.findIndex((item) => row.key === item.key);
+    // const item = newData[index];
+    // newData.splice(index, 1, { ...item, ...row });
+    // this.setState({
+    //   dataSource: newData,
+    // });
   };
 
 
   render() {
     const { visible, confirmLoading, ModalOkText } = this.state;
-    const { category } = this.props;
+    const reverseCategory = [...this.props.category].reverse();
     const components = {
       body: {
         row: EditableRow,
@@ -193,7 +178,7 @@ class Category extends React.Component {
         }),
       };
     });
-    // console.log(columns);
+    // console.log(columns);  
 
     return (
       <div>
@@ -223,7 +208,7 @@ class Category extends React.Component {
           components={components}
           rowClassName='editable-row'
           bordered
-          dataSource={category.reverse()}
+          dataSource={reverseCategory}
           columns={columns}
           pagination={{ defaultPageSize: 5, hideOnSinglePage: true, }}
           loading={false}
