@@ -4,11 +4,10 @@ import qs from "querystring"
 import NProgress from 'nprogress'
 import "nprogress/nprogress.css"
 
-import { BASE_URL } from '../myConfig'
 import store from '../redux/store'
 
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "http://localhost:3000",
   // timeout: 5000
 })
 
@@ -16,9 +15,9 @@ const instance = axios.create({
 
 // 拦截器封装个人理念：
 //     统一添加token
-//     所有请求统一用antd在此显示结果的信息(成功或失败)
+//     如果失败，所有请求统一用antd在此显示错误的信息
 //     请求无论成功或失败都返回resolve(结果对象(res或err)，自动登陆验证token失败除外)，且不进行其他跳转之内的操作
-//     token验证失败就清楚localStorage
+//     token验证失败就清除localStorage
 
 
 instance.interceptors.request.use((config) => {
@@ -43,14 +42,14 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use((res) => {
   NProgress.done()
-  const { data, status, msg } = res.data
+  const {  status, msg } = res.data;
 
-  if (status) {           //统一处理请求成功但后台拒绝的情况
-    message.error(msg, 1)
-  } else {
-    // msg && message.success("自动登陆成功", 1); //这个会导致每次刷新都显示此消息
-    data && message.success("操作成功", 1);
-  }
+  // if (status) {           //统一处理请求成功但后台拒绝的情况
+  //   message.error(msg, 1)
+  // } else {
+  //   // msg && message.success("自动登陆成功", 1); //这个会导致每次刷新都显示此消息
+  // }
+  status && message.error(msg, 1);
   return res.data;
 
 }, (err) => {
@@ -59,7 +58,7 @@ instance.interceptors.response.use((res) => {
   if (err.message === "Request failed with status code 401") {    //用户token验证不通过
     localStorage.removeItem("userToken");
     localStorage.removeItem("userInfo");
-
+    
     return Promise.resolve({ status: 1, err })  //为了统一返回成功promise原则
   }
 

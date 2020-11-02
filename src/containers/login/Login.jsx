@@ -43,14 +43,16 @@ class Login extends React.Component {
   onFinish = async ({ username, password }) => {
     if (!isLoginDebounce) {
       isLoginDebounce = true;
-      const result = await reqLogin(username, password);
-      isLoginDebounce = false;
-      if (!result.status) {   //登陆请求成功
-        // debugger
-        localStorage.setItem("userToken", JSON.stringify(result.data.token));  //保存token,和用户信息到localStorage中
-        localStorage.setItem("userInfo", JSON.stringify(result.data.user));
+      const { data, status } = await reqLogin(username, password);
 
-        this.props.saveUserAction(result.data) //保存user数据到redux
+      isLoginDebounce = false;
+      if (!status) {   //登陆请求成功
+        // debugger
+        message.success("登陆成功", 1)
+        localStorage.setItem("userToken", JSON.stringify(data.token));  //保存token,和用户信息到localStorage中
+        localStorage.setItem("userInfo", JSON.stringify(data.user));
+
+        this.props.saveUserAction(data) //保存user数据到redux
 
         this.props.history.push("/admin");  //  路由跳转
       }

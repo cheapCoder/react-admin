@@ -29,24 +29,22 @@ class Admin extends Component {
     headerName: ""
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { user, history, changeIsLoginAction, saveCategoryAction } = this.props
 
     //验证用户身份
-    user.isLogin || reqVerifyToken().then(({ status }) => {
-      if (status) {   //用户信息检查
+    user.isLogin || reqVerifyToken().then((res) => {
+      if (res && !res.status) {   //用户信息检查
+        changeIsLoginAction() //单独修改isLogin为true
+        // 提前获取分类列表，并保存到redux中
+        reqCategoryList().then(({ data:listData }) => {
+          saveCategoryAction(listData);   //保存到redux
+        })
+      } else {
         message.error("身份信息失效，请重新登陆！", 1);     //网络请求失败
         history.replace("/login");
-      } else {
-        changeIsLoginAction() //单独修改isLogin为true
       }
     })
-
-    // 提前获取分类列表，并保存到redux中
-    reqCategoryList().then((res) => {
-      saveCategoryAction(res.data);   //保存到redux
-    })
-
   }
 
 

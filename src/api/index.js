@@ -19,3 +19,12 @@ export const addCategoryList = (categoryName) => instance.post("/manage/category
 // 更改分类列表
 export const updateCategoryList = (categoryId, categoryName) => instance.post("/manage/category/update", { categoryId, categoryName });
 
+// 获取商品列表
+export const reqProductList = (pageNum, pageSize) => instance.get("/manage/product/list", { params: { pageNum, pageSize } });
+
+//请求上架，下架
+export const changeProductStatus = (productName, status) => instance.post("/manage/product/updateStatus", { productName, status });
+
+//请求搜索商品
+export const reqSearchProduct = ({ pageNum, pageSize, type, keyWord  }) => instance.get("/manage/product/search", { params: { pageNum, pageSize, [type]: keyWord } });
+

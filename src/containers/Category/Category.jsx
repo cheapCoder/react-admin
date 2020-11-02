@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { connect, useSelector, useDispatch } from "react-redux"
+import { connect, useDispatch } from "react-redux"
 import { Table, Input, Button, Popconfirm, Form, Modal } from 'antd';
 import { createFromIconfontCN, QuestionCircleOutlined } from '@ant-design/icons';
 
-import { addCategoryList, reqCategoryList, updateCategoryList } from '../../api/index'
+import { addCategoryList, updateCategoryList } from '../../api/index'
 import { saveCategoryAction, changeCategoryAction } from '../../redux/action'
 
 const IconFont = createFromIconfontCN({
@@ -47,14 +47,12 @@ const EditableCell = ({ title, editable, children, dataIndex, record, handleSave
 
   const save = async (e) => {
     try {
-
       const values = await form.validateFields();
       console.log(record._id);
+      toggleEdit();
+
       await updateCategoryList(record._id, values.name)  //请求更新分类列表
       dispatch(changeCategoryAction({ _id: record._id, name: values.name }))    //分发修改redux的category的action
-      toggleEdit();
-      handleSave({ ...record, ...values });
-
 
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
@@ -67,16 +65,16 @@ const EditableCell = ({ title, editable, children, dataIndex, record, handleSave
     childNode = editing ? (
       <Form.Item
         name={dataIndex}
+        noStyle
         rules={[
           {
             required: true,
             message: `${title} is required.`,
           },]} >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-      </Form.Item>
-    ) : (<div className="editable-cell-value-wrap" style={{ paddingRight: 24, }} onClick={toggleEdit}>
-      {children}
-    </div>);
+      </Form.Item>) : (<div onClick={toggleEdit}>
+        {children}
+      </div>);
   }
   return <td {...restProps}>{childNode}</td>;
 };
@@ -143,16 +141,6 @@ class Category extends React.Component {
     this.categoryInput.state.value = ""
   };
 
-  handleSave = (row) => {   //保存新数据到redux
-    // const newData = [...this.state.dataSource];
-    // const index = newData.findIndex((item) => row.key === item.key);
-    // const item = newData[index];
-    // newData.splice(index, 1, { ...item, ...row });
-    // this.setState({
-    //   dataSource: newData,
-    // });
-  };
-
 
   render() {
     const { visible, confirmLoading, ModalOkText } = this.state;
@@ -174,19 +162,18 @@ class Category extends React.Component {
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
-          handleSave: this.handleSave,
         }),
       };
     });
-    // console.log(columns);  
 
     return (
-      <div>
+      <>
         <Button
           onClick={() => { this.setState({ visible: true }) }}
           type="primary"
           style={{
             marginBottom: 16,
+            marginLeft: "68vw",
             borderRadius: 15,
           }}
         ><IconFont type="icon-titlebar_ic_add" />
@@ -211,9 +198,9 @@ class Category extends React.Component {
           dataSource={reverseCategory}
           columns={columns}
           pagination={{ defaultPageSize: 5, hideOnSinglePage: true, }}
-          loading={false}
+          loading={!reverseCategory.length}
         />
-      </div>
+      </>
     );
   }
 }
