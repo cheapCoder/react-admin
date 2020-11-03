@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Drawer, Row, Col, Divider, Image } from 'antd'
 import { connect } from 'react-redux'
 
-// import { reqProductDetail } from '../../api/index'
+import { reqProductDetail } from '../../api/index'
 
 const POP_PLACEMENT = 'left'
 
@@ -18,10 +18,7 @@ const MyRow = function ({ title, content, direction = "horizon", ...restProps })
 
 @connect(state => ({ category: state.category }))
 class Detail extends Component {
-
-  componentDidMount() {
-    // reqProductDetail();
-  }
+  
 
   render() {
     const { show, changeIspop, currentDetail, category } = this.props
@@ -32,7 +29,7 @@ class Detail extends Component {
     } else {
       categoryName = "暂无分类"
     }
-
+    
 
     return (
       <Drawer

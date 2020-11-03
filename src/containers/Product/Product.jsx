@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Form, Input, Select, Button, Card, Table, Tooltip, Space, Spin, Drawer, Radio } from 'antd';
 import { createFromIconfontCN, SearchOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Input, Select, Space, Spin, Table, Tooltip } from 'antd';
+import React, { Component } from 'react';
+import { changeProductStatus, reqSearchProduct } from '../../api/index';
+import Detail from '../Detail.jsx/Detail';
+import './product.less';
 
-import './product.less'
-import { changeProductStatus, reqSearchProduct } from '../../api/index'
-import Detail from '../Detail.jsx/Detail'
 
 const PAGE_SIZE = 5;
 const IconFont = createFromIconfontCN({
@@ -86,7 +86,7 @@ class Product extends Component {
 
 
   changeStatus = (record) => {
-    changeProductStatus(record.name, record.status === 1 ? 2 : 1)   //请求更改商品上架，下架状态
+    changeProductStatus(record._id, record.status === 1 ? 2 : 1)   //请求更改商品上架，下架状态
 
     const duplicateList = [...this.state.currentList];      //同时更改redux的数据
     duplicateList.map((item) => {

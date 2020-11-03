@@ -23,10 +23,10 @@ export const updateCategoryList = (categoryId, categoryName) => instance.post("/
 // export const reqProductList = (pageNum, pageSize) => instance.get("/manage/product/list", { params: { pageNum, pageSize } });
 
 //请求上架，下架
-export const changeProductStatus = (productName, status) => instance.post("/manage/product/updateStatus", { productName, status });
+export const changeProductStatus = (productId, status) => instance.post("/manage/product/updateStatus", { productId, status });
 
 //请求搜索商品
 export const reqSearchProduct = ({ pageNum, pageSize, type, keyWord }) => instance.get("/manage/product/search", { params: { pageNum, pageSize, [type]: keyWord } });
 
 // 根据商品ID获取商品
-export const reqProductDetail = (productName) => instance.get('/manage/product/info', { params: { productName } })
+export const reqProductDetail = (productId) => instance.get('/manage/product/info', { params: { productId } })

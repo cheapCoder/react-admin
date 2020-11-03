@@ -87,7 +87,7 @@ class MyHeader extends Component {
         <li>{this.state.nowTime}</li>
         {/* <li>weather</li> */}
       </ul>
-      <Button type="link" className="fullScreen" onClick={this.handleFullScreen}>
+      <Button type="link" className="fullScreen" onClick={this.handleFullScreen} >
         {this.state.isFullscreen ? <FullscreenExitOutlined spin/> : <FullscreenOutlined spin/>}
       </Button>
 
