@@ -75,7 +75,6 @@ class MyHeader extends Component {
 
 
   render() {
-    // console.log(this.props);
     return (<div className="header">
       <header>{this.props.headerName}</header>
       <nav></nav>

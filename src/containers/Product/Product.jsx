@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, Card, Table, Tooltip, Space, Spin } from 'antd';
+import { Form, Input, Select, Button, Card, Table, Tooltip, Space, Spin, Drawer, Radio } from 'antd';
 import { createFromIconfontCN, SearchOutlined } from '@ant-design/icons';
 
 import './product.less'
-import {  changeProductStatus, reqSearchProduct } from '../../api/index'
+import { changeProductStatus, reqSearchProduct } from '../../api/index'
+import Detail from '../Detail.jsx/Detail'
 
 const PAGE_SIZE = 5;
 const IconFont = createFromIconfontCN({
@@ -13,6 +14,15 @@ const IconFont = createFromIconfontCN({
 
 
 class Product extends Component {
+  state = {
+    isPop: false,
+    showLoading: false,
+    currentList: [],
+    pages: 0,
+    total: 0,
+    currentDetail: { name: "", price: 0, desc: "", imgs: [], detail: "", }
+  }
+
   columns = [
     {
       title: '商品名称',
@@ -49,7 +59,6 @@ class Product extends Component {
     {
       title: '状态',
       key: 'status',
-      // dataIndex: 'status',
       align: 'center',
       width: "5vw",
       ellipsis: {
@@ -66,22 +75,15 @@ class Product extends Component {
       ellipsis: {
         showTitle: false,
       },
-      render: () =>
+      render: (record) =>
         <Space direction="vertical" >
-          {/* <span>详情</span>
-          <span>修改</span> */}
-          <Button type="link">详情</Button>
-          <Button type="link">修改</Button>
+          <Button type="link" onClick={() => { this.setState({ isPop: true, currentDetail: record }); }}>详情</Button>
+          <Button type="link" onClick={() => { this.props.history.push({pathname:"/admin/prod_about/detail", state:record}) }}>修改</Button>
         </Space>
     },
   ];
 
-  state = {
-    showLoading: false,
-    currentList: [],
-    pages: 0,
-    total: 0,
-  }
+
 
   changeStatus = (record) => {
     changeProductStatus(record.name, record.status === 1 ? 2 : 1)   //请求更改商品上架，下架状态
@@ -99,15 +101,15 @@ class Product extends Component {
   }
 
 
-  handleSearch = async (pageNum, pageSize) => {    //分页器搜索和form表单搜索统一
+  handleSearch = async (pageNum, pageSize = PAGE_SIZE) => {    //分页器搜索和form表单搜索统一
     this.setState({ showLoading: true })
     const { type, keyWord } = this.formRef.getFieldsValue();   // 统一通过ref获取form表单字段值，不用传入
-    const { data: { pages, total, list }, status } = await reqSearchProduct({ pageNum, pageSize, type, keyWord });   //请求当前页面的商品信息
+    const { data, status } = await reqSearchProduct({ pageNum, pageSize, type, keyWord });   //请求当前页面的商品信息
     status || this.setState({
       showLoading: false,
-      currentList: list,
-      pages,
-      total,
+      currentList: data.list,
+      pages: data.pages,
+      total: data.total
     })
   }
 
@@ -117,6 +119,7 @@ class Product extends Component {
 
   render() {
     const { Option } = Select;
+    const { currentDetail, showLoading, currentList, isPop } = this.state;
 
     return (<Card
       headStyle={{ border: "none", padding: 0 }}
@@ -149,18 +152,22 @@ class Product extends Component {
         borderRadius: 15
       }}><IconFont type="icon-titlebar_ic_add" />添加商品</Button>}
     >
-      <Spin tip="Loading..." spinning={this.state.showLoading}>
+      <Spin tip="Loading..." spinning={showLoading}>
         <Table
           size="large"
           align="center"
           rowKey="_id"
           rowClassName="productTable"
           columns={this.columns}
-          dataSource={this.state.currentList}
+          dataSource={currentList}
           pagination={{ hideOnSinglePage: true, pageSize: PAGE_SIZE, total: this.state.total, onChange: (page, pageSize) => { this.handleSearch(page, pageSize) } }}
         />
+        <Detail
+          show={isPop}
+          currentDetail={currentDetail}
+          changeIspop={() => { this.setState({ isPop: false, currentDetail: { name: "", price: 0, desc: "", imgs: [], detail: "", } }) }} />
       </Spin>,
-    </Card>)
+    </Card >)
   }
 }
 

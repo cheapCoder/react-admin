@@ -14,6 +14,7 @@ import Role from '../Role/Role';
 import Bar from '../Bar/Bar';
 import Line from '../Line/Line';
 import Pie from '../Pie/Pie';
+import ChangeProduct from '../ChangeProduct/ChangeProduct'
 
 import './Admin.less';
 import { reqCategoryList, reqVerifyToken } from "../../api/index";
@@ -37,7 +38,7 @@ class Admin extends Component {
       if (res && !res.status) {   //用户信息检查
         changeIsLoginAction() //单独修改isLogin为true
         // 提前获取分类列表，并保存到redux中
-        reqCategoryList().then(({ data:listData }) => {
+        reqCategoryList().then(({ data: listData }) => {
           saveCategoryAction(listData);   //保存到redux
         })
       } else {
@@ -66,6 +67,7 @@ class Admin extends Component {
               <Route path="/admin/home" component={Home} />
               <Route path="/admin/prod_about/category" component={Category} />
               <Route path="/admin/prod_about/product" component={Product} />
+              <Route path="/admin/prod_about/detail" component={ChangeProduct} />
               <Route path="/admin/user" component={User} />
               <Route path="/admin/role" component={Role} />
               <Route path="/admin/charts/pie" component={Pie} />

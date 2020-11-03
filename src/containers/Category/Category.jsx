@@ -48,7 +48,6 @@ const EditableCell = ({ title, editable, children, dataIndex, record, handleSave
   const save = async (e) => {
     try {
       const values = await form.validateFields();
-      console.log(record._id);
       toggleEdit();
 
       await updateCategoryList(record._id, values.name)  //请求更新分类列表
@@ -102,8 +101,7 @@ class Category extends React.Component {
       title: '操作',
       dataIndex: 'operation',
       align: "center",
-      render: (text, record) => {
-        // console.log(text, record);
+      render: () => {
         return this.props.category.length >= 1 ? (
           <Popconfirm title="删除后不可恢复，确认删除？" icon={<QuestionCircleOutlined style={{ color: 'red' }} />} okText="确定" cancelText="算了算了" okButtonProps={{ "danger": true }} onConfirm={() => {
             Modal.warning({
