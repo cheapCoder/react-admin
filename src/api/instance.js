@@ -63,7 +63,7 @@ instance.interceptors.response.use((res) => {
   }
 
   message.error(err.message, 1);     //网络请求失败
-  return new Promise(() => { })
+  return new Promise(() => {})
 })
 
 export default instance;

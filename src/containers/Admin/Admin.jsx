@@ -48,40 +48,34 @@ class Admin extends Component {
     })
   }
 
+    render() {
+  const { Footer } = Layout;
 
+  return (
+    <Layout className="admin" >
+      <MySider pathname={this.props.location.pathname} setHeaderName={(newName) => { this.setState({ headerName: newName }) }} />
+      <Layout className="admin-main" >
+        <MyHeader headerName={this.state.headerName} />
+        <div className="admin-content">
+          <Switch >
+            <Route path="/admin/home" component={Home} />
+            <Route path="/admin/prod_about/category" component={Category} />
+            <Route path="/admin/prod_about/product" component={Product} />
+            <Route path="/admin/prod_about/changeproduct" component={ChangeProduct} />
+            <Route path="/admin/user" component={User} />
+            <Route path="/admin/role" component={Role} />
+            <Route path="/admin/charts/pie" component={Pie} />
+            <Route path="/admin/charts/line" component={Line} />
+            <Route path="/admin/charts/bar" component={Bar} />
+            <Redirect to="/admin/home" />
+          </Switch>
+        </div>
 
-  setHeaderName = (newName) => {
-    this.setState({ headerName: newName })
-  }
-
-  render() {
-    const { Footer } = Layout;
-
-    return (
-      <Layout className="admin" >
-        <MySider pathname={this.props.location.pathname} setHeaderName={this.setHeaderName} />
-        <Layout className="admin-main" >
-          <MyHeader headerName={this.state.headerName} />
-          <div className="admin-content">
-            <Switch >
-              <Route path="/admin/home" component={Home} />
-              <Route path="/admin/prod_about/category" component={Category} />
-              <Route path="/admin/prod_about/product" component={Product} />
-              <Route path="/admin/prod_about/detail" component={ChangeProduct} />
-              <Route path="/admin/user" component={User} />
-              <Route path="/admin/role" component={Role} />
-              <Route path="/admin/charts/pie" component={Pie} />
-              <Route path="/admin/charts/line" component={Line} />
-              <Route path="/admin/charts/bar" component={Bar} />
-              <Redirect to="/admin/home" />
-            </Switch>
-          </div>
-
-          <Footer className="footer">developed by cheapCoder</Footer>
-        </Layout>
+        <Footer className="footer">developed by cheapCoder</Footer>
       </Layout>
-    )
-  }
+    </Layout>
+  )
+}
 }
 
 export default Admin;

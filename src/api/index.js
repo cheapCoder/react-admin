@@ -29,4 +29,13 @@ export const changeProductStatus = (productId, status) => instance.post("/manage
 export const reqSearchProduct = ({ pageNum, pageSize, type, keyWord }) => instance.get("/manage/product/search", { params: { pageNum, pageSize, [type]: keyWord } });
 
 // 根据商品ID获取商品
-export const reqProductDetail = (productId) => instance.get('/manage/product/info', { params: { productId } })
+// export const reqProductDetail = (productId) => instance.get('/manage/product/info', { params: { productId } })
+
+//添加商品
+export const reqAddProduct = ({ categoryId, name, desc, price, detail, imgs }) => instance.post("/manage/product/add", { categoryId, name, desc, price, detail, imgs })
+
+//更新商品信息
+export const reqUpdateProduct = ({ _id, categoryId, name, desc, price, detail, imgs }) => instance.post("/manage/product/update", { _id, categoryId, name, desc, price, detail, imgs });
+
+// 上传图片
+export const reqUploadImg = (image) => instance.post("/manage/img/upload", { image });

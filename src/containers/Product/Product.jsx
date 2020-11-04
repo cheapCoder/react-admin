@@ -78,7 +78,7 @@ class Product extends Component {
       render: (record) =>
         <Space direction="vertical" >
           <Button type="link" onClick={() => { this.setState({ isPop: true, currentDetail: record }); }}>详情</Button>
-          <Button type="link" onClick={() => { this.props.history.push({pathname:"/admin/prod_about/detail", state:record}) }}>修改</Button>
+          <Button type="link" onClick={() => { this.props.history.push({pathname:"/admin/prod_about/changeproduct", state:record}) }}>修改</Button>
         </Space>
     },
   ];
