@@ -8,6 +8,7 @@ import screenfull from "screenfull"
 
 
 import './myHeader.less'
+import avatar from './images/avatar.jpg'
 import { deleteUserAction } from "../../redux/action"
 
 
@@ -68,7 +69,6 @@ class MyHeader extends Component {
   }
 
   componentWillUnmount() {
-
     this.timeId && clearInterval(this.timeId)
     screenfull.off('change');
   }
@@ -80,7 +80,7 @@ class MyHeader extends Component {
       <nav></nav>
       <ul>
         <li>
-          <Button style={{ padding: 0 }} type="link" onClick={this.handleQuit}><Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" className="avatar" />
+          <Button style={{ padding: 0 }} type="link" onClick={this.handleQuit}><Avatar src={avatar} />
             <span className="name">Hello {this.props.user.userInfo.username}</span>
           </Button>
         </li>
@@ -88,7 +88,7 @@ class MyHeader extends Component {
         {/* <li>weather</li> */}
       </ul>
       <Button type="link" className="fullScreen" onClick={this.handleFullScreen} >
-        {this.state.isFullscreen ? <FullscreenExitOutlined spin/> : <FullscreenOutlined spin/>}
+        {this.state.isFullscreen ? <FullscreenExitOutlined spin /> : <FullscreenOutlined spin />}
       </Button>
 
     </div>);

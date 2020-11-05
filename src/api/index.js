@@ -1,5 +1,7 @@
 import instance from './instance'
 
+// 传参规定：参数多于三个则要求传递对象
+
 //请求登陆
 export const reqLogin = (username, password) => instance.post("/login", { username, password });
 
@@ -41,4 +43,10 @@ export const reqUpdateProduct = ({ _id, categoryId, name, desc, price, detail, i
 export const reqDeletePic = (name) => instance.post("/manage/img/delete", { name });
 
 //获取角色列表
-export const reqRoleList = (roleName) =>instance.post("/manage/role/add",{roleName})
+export const reqRoleList = () => instance.get("/manage/role/list")
+
+//添加角色
+export const reqAddRole = (roleName) => instance.post("/manage/role/add", { roleName })
+
+//更新角色权限
+export const reqUpdateRoleAuth = ({ _id, menus, auth_time, auth_name }) => instance.post("/manage/role/update", { _id, menus, auth_time, auth_name })

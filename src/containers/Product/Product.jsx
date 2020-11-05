@@ -1,6 +1,7 @@
-import { createFromIconfontCN, SearchOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Select, Space, Spin, Table, Tooltip } from 'antd';
 import React, { Component } from 'react';
+import { Button, Card, Form, Input, Select, Space, Spin, Table, Tooltip } from 'antd';
+import { createFromIconfontCN, SearchOutlined } from '@ant-design/icons';
+
 import { changeProductStatus, reqSearchProduct } from '../../api/index';
 import Detail from '../Detail.jsx/Detail';
 import './product.less';

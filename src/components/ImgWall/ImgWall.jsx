@@ -38,6 +38,8 @@ class ImgWall extends Component {
 
   handleBeforeUpload = (file, fileList) => {             //判断文件是否为image类型
     const fileType = file.type.split("/")[0];
+    console.log(file);
+    // if(file)
     if (fileType !== "image") {
       message.error("请上传图片类型", 1)
       fileList.pop();
@@ -63,7 +65,7 @@ class ImgWall extends Component {
     }
 
     if (file.status === 'removed') {    // 删除图片
-      console.log(file.url.slice(file.url.lastIndexOf("/") + 1));
+      // console.log(file.url.slice(file.url.lastIndexOf("/") + 1));
       reqDeletePic(file.url.slice(file.url.lastIndexOf("/") + 1)).then((res) => {
         !res.status && message.success("图片删除成功", 1);
         console.log(fileList);

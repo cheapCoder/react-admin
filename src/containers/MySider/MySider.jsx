@@ -28,7 +28,6 @@ class MySider extends Component {
   getHeaderName = ({ key }) => {
     const result = this.state.flattenMenu.find((item) => item.key === key)
     result && this.props.setHeaderName(result.title);
-
   }
 
   componentDidMount() {
@@ -37,8 +36,6 @@ class MySider extends Component {
       const keyArr = this.props.pathname.split('/');
       this.getHeaderName({ key: keyArr[keyArr.length - 1] });
     });
-
-
   }
 
   render() {

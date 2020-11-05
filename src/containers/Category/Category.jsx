@@ -131,11 +131,12 @@ class Category extends React.Component {
       this.setState({
         visible: false,
         confirmLoading: false,
-        ModalOkText: "",
+        ModalOkText: "确认",
       });
       this.categoryInput.state.value = ""
       res.data && this.props.saveCategoryAction([res.data]);   //保存新数据到redux
     })
+    // Modal.destroyAll();
   };
   // 取消添加分类
   handleAddCancel = () => {
@@ -191,10 +192,10 @@ class Category extends React.Component {
         <Modal
           title="添加分类"
           visible={visible}
-          onOk={this.handleAddOk}
           confirmLoading={confirmLoading}
+          onOk={this.handleAddOk}
           onCancel={this.handleAddCancel}
-          okText={ModalOkText || "确认"}
+          okText={ModalOkText}
           cancelText="取消"
         >
           <Input placeholder="请输入类名" autoFocus ref={ref => { this.categoryInput = ref }} />
