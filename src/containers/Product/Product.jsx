@@ -20,7 +20,8 @@ class Product extends Component {
     currentList: [],
     pages: 0,
     total: 0,
-    currentDetail: { name: "", price: 0, desc: "", imgs: [], detail: "", }
+    currentDetail: { name: "", price: 0, desc: "", imgs: [], detail: "", },
+    currentPage: 1
   }
 
   columns = [
@@ -78,7 +79,7 @@ class Product extends Component {
       render: (record) =>
         <Space direction="vertical" >
           <Button type="link" onClick={() => { this.setState({ isPop: true, currentDetail: record }); }}>详情</Button>
-          <Button type="link" onClick={() => { this.props.history.push({pathname:"/admin/prod_about/changeproduct", state:record}) }}>修改</Button>
+          <Button type="link" onClick={() => { this.props.history.push({ pathname: "/admin/prod_about/changeproduct", state: record }) }}>修改</Button>
         </Space>
     },
   ];
@@ -105,11 +106,13 @@ class Product extends Component {
     this.setState({ showLoading: true })
     const { type, keyWord } = this.formRef.getFieldsValue();   // 统一通过ref获取form表单字段值，不用传入
     const { data, status } = await reqSearchProduct({ pageNum, pageSize, type, keyWord });   //请求当前页面的商品信息
+    // console.log(data.list);
     status || this.setState({
       showLoading: false,
       currentList: data.list,
       pages: data.pages,
-      total: data.total
+      total: data.total,
+      currentPage: pageNum,
     })
   }
 
@@ -119,7 +122,7 @@ class Product extends Component {
 
   render() {
     const { Option } = Select;
-    const { currentDetail, showLoading, currentList, isPop } = this.state;
+    const { currentDetail, showLoading, currentList, isPop, currentPage } = this.state;
 
     return (<Card
       headStyle={{ border: "none", padding: 0 }}
@@ -148,9 +151,11 @@ class Product extends Component {
         </Form.Item>
       </Form>}
 
-      extra={<Button type="primary" style={{
-        borderRadius: 15
-      }}><IconFont type="icon-titlebar_ic_add" />添加商品</Button>}
+      extra={<Button
+        type="primary"
+        style={{ borderRadius: 15 }}
+        onClick={() => { this.props.history.push("/admin/prod_about/changeproduct") }}
+      ><IconFont type="icon-titlebar_ic_add" />添加商品</Button>}
     >
       <Spin tip="Loading..." spinning={showLoading}>
         <Table
@@ -160,7 +165,13 @@ class Product extends Component {
           rowClassName="productTable"
           columns={this.columns}
           dataSource={currentList}
-          pagination={{ hideOnSinglePage: true, pageSize: PAGE_SIZE, total: this.state.total, onChange: (page, pageSize) => { this.handleSearch(page, pageSize) } }}
+          pagination={{
+            hideOnSinglePage: true,
+            pageSize: PAGE_SIZE,
+            total: this.state.total,
+            current: currentPage,
+            onChange: (page, pageSize) => { this.handleSearch(page, pageSize) }
+          }}
         />
         <Detail
           show={isPop}

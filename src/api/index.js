@@ -37,5 +37,8 @@ export const reqAddProduct = ({ categoryId, name, desc, price, detail, imgs }) =
 //更新商品信息
 export const reqUpdateProduct = ({ _id, categoryId, name, desc, price, detail, imgs }) => instance.post("/manage/product/update", { _id, categoryId, name, desc, price, detail, imgs });
 
-// 上传图片
-export const reqUploadImg = (image) => instance.post("/manage/img/upload", { image });
+// 删除图片
+export const reqDeletePic = (name) => instance.post("/manage/img/delete", { name });
+
+//获取角色列表
+export const reqRoleList = (roleName) =>instance.post("/manage/role/add",{roleName})

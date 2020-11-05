@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Upload, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { reqUploadImg } from '../../api/index'
+import { reqDeletePic } from '../../api/index'
 
 const LOAD_URL = "http://localhost:3000/upload/";
 const UPLOAD_URL = "http://localhost:3000/manage/img/upload";
-const isImgArr = ['png', 'gif', 'jpg', 'jpeg', "webp"]
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -38,8 +37,8 @@ class ImgWall extends Component {
   }
 
   handleBeforeUpload = (file, fileList) => {             //判断文件是否为image类型
-    const arr = file.name.split(".");
-    if (!isImgArr.includes(arr[arr.length - 1])) {
+    const fileType = file.type.split("/")[0];
+    if (fileType !== "image") {
       message.error("请上传图片类型", 1)
       fileList.pop();
       return false;
@@ -61,13 +60,15 @@ class ImgWall extends Component {
         })
         this.setState({ fileList });
       }
-      return true
     }
 
     if (file.status === 'removed') {    // 删除图片
-      message.success("图片删除成功", 1);
-      this.setState({ fileList });
-      return true
+      console.log(file.url.slice(file.url.lastIndexOf("/") + 1));
+      reqDeletePic(file.url.slice(file.url.lastIndexOf("/") + 1)).then((res) => {
+        !res.status && message.success("图片删除成功", 1);
+        console.log(fileList);
+        this.setState({ fileList });
+      })
     }
   }
 

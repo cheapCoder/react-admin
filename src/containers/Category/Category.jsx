@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { connect, useDispatch } from "react-redux"
-import { Table, Input, Button, Popconfirm, Form, Modal } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Modal, message } from 'antd';
 import { createFromIconfontCN, QuestionCircleOutlined } from '@ant-design/icons';
 
 import { addCategoryList, updateCategoryList } from '../../api/index'
@@ -117,6 +117,12 @@ class Category extends React.Component {
 
   //添加分类
   handleAddOk = () => {
+    const currentValue = this.categoryInput.state.value && this.categoryInput.state.value.trim()
+    if (!currentValue) {                        //检测分类名是否为空
+      message.warn("内容不能为空", 1);
+      return;
+    }
+
     this.setState({
       ModalOkText: '正在添加...',
       confirmLoading: true,
@@ -139,6 +145,11 @@ class Category extends React.Component {
     this.categoryInput.state.value = ""
   };
 
+  componentDidMount() {
+    // console.log(this);
+    // console.log(this.categoryInput);
+    // this.categoryInput.focus(); 
+  }
 
   render() {
     const { visible, confirmLoading, ModalOkText } = this.state;
@@ -167,7 +178,7 @@ class Category extends React.Component {
     return (
       <>
         <Button
-          onClick={() => { this.setState({ visible: true }) }}
+          onClick={() => { this.setState({ visible: true }); }}
           type="primary"
           style={{
             marginBottom: 16,
@@ -186,7 +197,7 @@ class Category extends React.Component {
           okText={ModalOkText || "确认"}
           cancelText="取消"
         >
-          <Input placeholder="请输入类名" ref={ref => this.categoryInput = ref} />
+          <Input placeholder="请输入类名" autoFocus ref={ref => { this.categoryInput = ref }} />
         </Modal>
         <Table
           rowKey="_id"
