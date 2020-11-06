@@ -35,8 +35,8 @@ class MyHeader extends Component {
       okType: "danger",
       okText: "退出登录",
       cancelText: "确定",
-      icon: <SmileTwoTone />,
-      content: <div style={{ textAlign: "left", font: "bold 16px Arial", verticalAlign: "middle" }}>hi {that.props.user.userInfo.username}</div>,
+      icon: <SmileTwoTone style={{ verticalAlign: "bottom" }} />,
+      content: <div style={{ textAlign: "left", font: "bold 16px Arial", verticalAlign: "bottom" }}>hi {that.props.user.userInfo.username}</div>,
       onOk() {
         Modal.destroyAll();
         localStorage.clear();     //清除localstorage保存的信息
@@ -46,7 +46,7 @@ class MyHeader extends Component {
     });
   }
 
-  handleFullScreen = () => {
+  handleFullScreen = () => {        //全屏
     if (screenfull.isEnabled) {
       screenfull.toggle().then(() => {
         this.setState({ isFullscreen: screenfull.isFullscreen })
@@ -90,7 +90,7 @@ class MyHeader extends Component {
       <Button type="link" className="fullScreen" onClick={this.handleFullScreen} >
         {this.state.isFullscreen ? <FullscreenExitOutlined spin /> : <FullscreenOutlined spin />}
       </Button>
-
+    
     </div>);
   }
 }

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import {
   CHANGE_ISLOGIN_ACTION, SAVE_USER_ACTION, DELETE_USER_ACTION,
   SAVE_CATEGORY_ACTION, CHANGE_CATEGORY_ACTION,
-  SAVE_ROLELIST_ACTION, ADD_ROLELIST_ACTION
+  SAVE_ROLELIST_ACTION, ADD_ROLELIST_ACTION, UPDATE_ROLELIST_ACTION
 } from './actionTypes';
 
 
@@ -49,7 +49,7 @@ function categoryReducer(state = initailCategory, { type, data }) {
 
     case CHANGE_CATEGORY_ACTION: {
       let arr = [...state];
-      arr.splice(state.findIndex((item => item._id === data._id)), 1, data)
+      arr.splice(state.findIndex((item => item._id === data._id)), 1, data);
       return arr
     }
 
@@ -62,7 +62,15 @@ function categoryReducer(state = initailCategory, { type, data }) {
 const initialRoleList = []
 function roleReducer(state = initialRoleList, { type, data }) {
   switch (type) {
-    case SAVE_ROLELIST_ACTION: return [...state, ...data];
+    case SAVE_ROLELIST_ACTION: return data;
+
+    case ADD_ROLELIST_ACTION: return [...state, data];
+
+    case UPDATE_ROLELIST_ACTION: {
+      let arr = [...state];
+      arr.splice(arr.findIndex(item => item._id === data._id), 1, data);
+      return arr;
+    }
 
     default: return state;
   }

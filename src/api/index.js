@@ -50,3 +50,6 @@ export const reqAddRole = (roleName) => instance.post("/manage/role/add", { role
 
 //更新角色权限
 export const reqUpdateRoleAuth = ({ _id, menus, auth_time, auth_name }) => instance.post("/manage/role/update", { _id, menus, auth_time, auth_name })
+
+//获取用户列表
+export const reqUserList = () => instance.get("/manage/user/list")
