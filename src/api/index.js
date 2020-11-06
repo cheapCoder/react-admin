@@ -11,7 +11,6 @@ export const reqVerifyToken = () => instance.post("/check_token")
 // 高德天气接口
 // export const reqWeather = () => instance.post("")
 
-
 //获取分类列表
 export const reqCategoryList = () => instance.get("/manage/category/list");
 
@@ -53,3 +52,12 @@ export const reqUpdateRoleAuth = ({ _id, menus, auth_time, auth_name }) => insta
 
 //获取用户列表
 export const reqUserList = () => instance.get("/manage/user/list")
+
+//添加用户
+export const reqAddUser = ({ username, password, phone, email, role_id }) => instance.post("/manage/user/add", { username, password, phone, email, role_id })
+
+// 更新用户
+export const reqUpdateUser = ({ _id, username, phone, email, role_id }) => instance.post("/manage/user/update", { _id, username, phone, email, role_id })
+
+//删除用户
+export const reqDeleteUser = (userId) => instance.post("/manage/user/delete", { userId })

@@ -51,7 +51,7 @@ class ChangeProduct extends Component {
         title={_id ? "修改商品" : "添加商品"}
       />
       <Form
-        hideRequiredMark
+        requiredMark={false}
         scrollToFirstError
         ref={ref => this.formRef = ref}
         labelCol={{ span: 4, offset: 1 }}
