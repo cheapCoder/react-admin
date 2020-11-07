@@ -118,14 +118,6 @@ class User extends Component {
     this.setState({ okText: "确认", confirmLoading: false, currentUser: {} });
   }
 
-  // //修改角色信息
-  // handleUpdateUserOk = async () => {
-  //   this.setState({ okText: "添加中...", confirmLoading: true });
-
-  //   console.log(result);
-  //   this.setState({})
-  // }
-
   handleUserCancel = () => {     //添加或修改用户modal取消后
     this.setState({ userVisible: false, currentUser: {} });
     this.addFormRef.resetFields();
