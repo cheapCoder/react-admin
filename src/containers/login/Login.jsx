@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { reqLogin, reqVerifyToken } from '../../api/index';
 import { saveUserAction } from "../../redux/action"
 import './login.less';
-
+import { validateRuler } from '../../configs/index'   //引入login验证反馈信息
 
 
 //表单布局
@@ -17,9 +17,6 @@ const tailLayout = {
   wrapperCol: { offset: 10, span: 2 },
 };
 
-//表单验证规则
-const validateRuler = [{ required: true, message: "这是必输项" }, { max: 12, message: "输入超出上限" }, { min: 4, message: "输入不及下限" }, { whitespace: true, message: "are you kidding？" }, { pattern: /^\w+$/, message: '必须是英文、数组或下划线组成' }]
-
 let isLoginDebounce = false   //用于对登陆请求防抖
 
 // 组件类
@@ -30,14 +27,6 @@ let isLoginDebounce = false   //用于对登陆请求防抖
   { saveUserAction }
 )
 class Login extends React.Component {
-  componentDidMount() {   //自动登陆
-    const { history, isLogin } = this.props;
-    isLogin || reqVerifyToken().then((res) => {
-      if (!res.status) {
-        history.replace("/admin");
-      }
-    })
-  }
 
   //输入格式正确时提交
   onFinish = async ({ username, password }) => {
@@ -62,13 +51,23 @@ class Login extends React.Component {
   };
 
   onFinishFailed = () => { message.error('输入有误，请重新输入', 1); };
+
+  componentDidMount() {   //自动登陆
+    const { history, isLogin } = this.props;
+    isLogin || reqVerifyToken().then((res) => {
+      if (!res.status) {
+        history.replace("/admin");
+      }
+    })
+  }
+
   render() {
 
     return (
       <div className="login">
         <h1>React后台管理系统</h1>
         <article className="loginForm">
-          <h2 style={{ marginTop: "20px" }}>LOGIN IN</h2>
+          <h2 style={{ marginTop: "20px" }}>LOG IN</h2>
           <Form
             requiredMark={false}
             {...layout}

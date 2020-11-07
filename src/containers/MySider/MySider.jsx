@@ -1,16 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { Menu, Layout } from 'antd'
-import { Icon as LegacyIcon } from '@ant-design/compatible';    //有待商榷！！！
-
 
 import reactLogo from "./images/react.png"
 import './sider.less'
 import menu from './js/menu-config'
+import { flatten, recurMenu } from '../../utils/index'
 
-
-
-const { SubMenu, Item } = Menu;
 
 class MySider extends Component {
   state = {
@@ -19,21 +14,26 @@ class MySider extends Component {
   }
 
 
-
   handleCollapse = (collapsed) => {
     collapsed && (this.systemName.style.display = this.state.collapsed ? "inline" : "none")
     this.setState({ collapsed: !this.state.collapsed });
   }
 
   getHeaderName = ({ key }) => {
+    if (key === "changeproduct") {
+      key = "product";
+    }
+    console.log(key, this.state.flattenMenu);
     const result = this.state.flattenMenu.find((item) => item.key === key)
+    console.log(result);
     result && this.props.setHeaderName(result.title);
   }
 
   componentDidMount() {
-    flatten(menu);        //扁平化菜单数组
-    this.setState({ flattenMenu: shortArr }, () => {
+    // console.log(flatten(menu));
+    this.setState({ flattenMenu: flatten(menu) }, () => {    //扁平化菜单数组
       const keyArr = this.props.pathname.split('/');
+      // console.log(keyArr[keyArr.length - 1]);
       this.getHeaderName({ key: keyArr[keyArr.length - 1] });
     });
   }
@@ -72,40 +72,6 @@ class MySider extends Component {
   }
 }
 
-// 递归数组返回菜单
-function recurMenu(MenuArr) {
-  return MenuArr.map((item) => {
-    let { children, title, key, icon } = item;
-    if (!children) {    //没有children则为叶级菜单
-      // return React.createElement(Item, {
-      //   icon: React.createElement(Icon[iconType]),
-      //   key,
-      // }, title)
-      return <Item icon={<LegacyIcon type={icon} />} key={key}><Link to={item.path}>{title}</Link></Item>
-      // return <Item key={key}><Link to={item.path}>{title}</Link></Item>
-
-    } else {
-      // return React.createElement(SubMenu, { key, icon: React.createElement(Icon[iconType]), title }, recurMenu(children))
-      return <SubMenu key={key} icon={<LegacyIcon type={icon} />} title={title}>
-        {recurMenu(children)}
-      </SubMenu>
-      // return <SubMenu key={key} title={title}>
-      //   {recurMenu(children)}
-      // </SubMenu>
-    }
-  })
-}
-
-let shortArr = [];
-function flatten(arr) {   //扁平化数组
-  arr.forEach(item => {
-    if (item.children) {
-      flatten(item.children);
-    } else {
-      shortArr.push(item);
-    }
-  });
-}
 
 export default MySider;
 

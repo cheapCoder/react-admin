@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 
 import { reqUserList, reqAddUser, reqDeleteUser, reqUpdateUser } from '../../api/index'
 import { saveRoleListAction } from '../../redux/action'
+import { validateRuler as loginValidateRuler } from '../../configs/index'
 
 const { Item } = Form;
 const { Option } = Select;
@@ -17,11 +18,8 @@ const validateMessages = {        //添加用户表单验证反馈信息
   required: '${label}是必填项',
   types: {
     email: '${label}不符合邮件格式',
-    number: '${label} 不是数字',
-  },
-  number: {
-    range: '${label}必须在${max}到${min}之间',
-  },
+    number: '${label}必须是数字',
+  }
 };
 
 
@@ -43,7 +41,6 @@ class User extends Component {
       dataIndex: 'username',
       key: 'username',
       align: "center",
-      // render: text => <a>{text}</a>,
     },
     {
       title: '邮箱',
@@ -76,22 +73,15 @@ class User extends Component {
       key: 'operation',
       align: "center",
       render: (currentUser) => (<Space>
-        <Button type="link" onClick={() => {
-          this.setState({ currentUser }, () => {
-            this.setState({ userVisible: true })
-          })
-        }}>修改</Button>
-        <Button type="link" onClick={() => {
-          this.setState({ currentUser }, () => {
-            this.setState({ deleteVisible: true, })
-          })
-        }}>删除</Button>
+        {/* <Button type="link" onClick={() => { this.setState({ currentUser }, () => { this.setState({ userVisible: true }) }) }}>修改</Button> */}
+        <Button type="link" onClick={() => { this.setState({ currentUser }, () => { this.setState({ userVisible: true, }) }) }}>修改</Button>
+        <Button type="link" onClick={() => { this.setState({ currentUser }, () => { this.setState({ deleteVisible: true, }) }) }}>删除</Button>
       </Space>)
     },
   ];
 
-  // 添加角色和删除角色统一处理函数
-  handleAddUserOk = async () => {    //用户信息modal确认后
+  // 添加用户和修改用户统一处理函数
+  handleChangeUserOk = async () => {    //用户信息modal确认后
     const { currentUser, userList } = this.state;
     this.setState({ okText: "添加中...", confirmLoading: true });
 
@@ -99,14 +89,14 @@ class User extends Component {
       const { confirmPassword, ...restReqData } = await this.addFormRef.validateFields()          //首先进行表单验证
       let result;
       if (JSON.stringify(currentUser) === "{}") {
-        result = await reqAddUser(restReqData)                            //发送添加用户请求
+        result = await reqAddUser(restReqData)                //发送添加用户请求                       
         result.status || this.setState({ userList: [...userList, result.data], userVisible: false }); ////请求成功就保存数据到状态里
-        this.addFormRef.resetFields();
+        result.status && this.addFormRef.resetFields();
       } else {
         result = await reqUpdateUser(currentUser);           //发送更新用户信息请求
         if (!result.status) {
-          this.setState({ userList: [...userList.filter(item => item !== currentUser), currentUser], userVisible: false })
-          this.addFormRef.resetFields();
+          this.setState({ userList: [...userList.filter(item => item !== currentUser), currentUser], userVisible: false, currentUser: {} })
+          // this.addFormRef.resetFields();
         }
 
       }
@@ -118,12 +108,13 @@ class User extends Component {
     this.setState({ okText: "确认", confirmLoading: false, currentUser: {} });
   }
 
-  handleUserCancel = () => {     //添加或修改用户modal取消后
+  //添加或修改用户modal取消后
+  handleUserCancel = () => {
     this.setState({ userVisible: false, currentUser: {} });
-    this.addFormRef.resetFields();
+    // this.addFormRef.resetFields();
   }
 
-  // 删除角色
+  // 删除用户
   handleDeleteOk = async () => {              //删除用户modal确认后
     const { currentUser, userList } = this.state
     this.setState({ confirmLoading: true });
@@ -157,7 +148,6 @@ class User extends Component {
       headStyle={{ border: "none", padding: 0 }}
       bodyStyle={{ padding: 0, }}
       bordered={false}
-
       title={<Button
         type="primary"
         style={{ borderRadius: 15 }}
@@ -176,11 +166,12 @@ class User extends Component {
       {/* </Spin> */}
 
       <Modal
-        centered                   //添加角色和更新角色的模态框
-        title={JSON.stringify(currentUser) === "{}" ? "添加角色" : "更新角色"}
+        centered                   //添加用户和更新用户的模态框
+        destroyOnClose
+        title={JSON.stringify(currentUser) === "{}" ? "添加用户" : "更新用户"}
         visible={userVisible}
         confirmLoading={confirmLoading}
-        onOk={JSON.stringify(currentUser) === "{}" ? this.handleAddUserOk : this.handleUpdateUserOk}
+        onOk={this.handleChangeUserOk}
         onCancel={this.handleUserCancel}
         okText={okText}
         cancelText="取消"
@@ -193,10 +184,10 @@ class User extends Component {
           validateMessages={validateMessages}
           requiredMark={false}
           initialValues={{
-            username: (currentUser && currentUser.username) || "",
-            phone: (currentUser && currentUser.phone) || "",
-            email: (currentUser && currentUser.email) || "",
-            role_id: (currentUser && currentUser.role_id) || "",
+            username: (currentUser && currentUser.username) || null,
+            phone: (currentUser && currentUser.phone) || null,
+            email: (currentUser && currentUser.email) || null,
+            role_id: (currentUser && currentUser.role_id) || null,
           }}
           ref={ref => this.addFormRef = ref}
         >
@@ -204,7 +195,7 @@ class User extends Component {
             name="username"
             label="用户名"
             hasFeedback
-            rules={[{ required: true }]}
+            rules={loginValidateRuler}
           >
             <Input autoFocus placeholder="请输入用户名" />
           </Item>
@@ -212,7 +203,7 @@ class User extends Component {
             name="password"
             label="密码"
             hasFeedback
-            rules={[{ required: true }]}
+            rules={loginValidateRuler}
           >
             <Input.Password placeholder={JSON.stringify(currentUser) === "{}" ? "请输入密码" : "请输入新密码"} />
           </Item>
@@ -236,7 +227,7 @@ class User extends Component {
             name="phone"
             label="手机号"
             hasFeedback
-            rules={[{ required: true }]}
+            rules={[{ required: true }, { type: "number", transform: phone => Number(phone) }]}
           >
             <Input placeholder="请输入手机号" />
           </Item>
