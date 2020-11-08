@@ -12,11 +12,11 @@ const validateRuler = [
 ]
 
 //公开路由，不用验证角色权限
-const pulicRoutes = ["login", "home"]
+const publicRoutes = ["login", "home"]
 
 
 export {
   validateRuler,
   echartTheme,
-  pulicRoutes,
+  publicRoutes,
 }

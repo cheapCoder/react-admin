@@ -19,7 +19,7 @@ import ChangeProduct from '../ChangeProduct/ChangeProduct'
 import './Admin.less';
 import { reqCategoryList, reqVerifyToken } from "../../api/index";
 import { changeIsLoginAction, saveCategoryAction } from '../../redux/action'
-import { pulicRoutes } from '../../configs/index'
+import { publicRoutes } from '../../configs/index'
 
 
 
@@ -34,10 +34,10 @@ class Admin extends Component {
 
     const arr = location.pathname.split("/")                // 判断当前路由地址用户是否有权限查看
     const lastPathname = arr[arr.length - 1]
-    if (!pulicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
+    if (user.userInfo.username!=="admin" &&!publicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
       history.replace("/admin/home");
     }
-
+    
     //验证用户登陆身份
     user.isLogin || reqVerifyToken().then((res) => {
       if (res && !res.status) {   //用户信息检查
