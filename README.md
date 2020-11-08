@@ -1,16 +1,16 @@
 # 介绍
 
-![](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190344312.png)
+![](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190344312.png)
 
-![image-20201108190253666](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190253666.png)
+![image-20201108190253666](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190253666.png)
 
-![image-20201108190401705](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190401705.png)
+![image-20201108190401705](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190401705.png)
 
-![image-20201108190432388](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190432388.png)
+![image-20201108190432388](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190432388.png)
 
-![image-20201108190538232](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190538232.png)
+![image-20201108190538232](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190538232.png)
 
-![image-20201108190900951](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190900951.png)
+![image-20201108190900951](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201108190900951.png)
 
 # React项目任务列表
 
@@ -156,7 +156,7 @@
   >
   > 使用兼容v3的库[Ant Design Compatible](https://github.com/ant-design/compatible#icon), 但会全量引入icon, 增大包体积，且控制台报错
   >
-  > ![image-20201030091112297](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201030091112297.png)
+  > ![image-20201030091112297](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201030091112297.png)
   >
   > **期待更优雅的方案！**
 
@@ -212,7 +212,7 @@
 
   > ​		form的值修改不能用setState，要用setFieldValue，
   >
-  > ![image-20201107224436951](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201107224436951.png)
+  > ![image-20201107224436951](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201107224436951.png)
 
 - [x] **通过动态渲染左侧导航栏来实现权限验证不可取，可能会通过地址栏地址跳转**
 
@@ -235,7 +235,7 @@
 1. react里setState对象或数组要解构，因为最后都是引用同一个对象
 2. 组件引入图片等需要使用import 引入，在img标签中使用变量指定目标图片
 3. 利用state作为任意两标签间通信的介质
-4. **this.setState是异步的**![](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201023160219506.png)
+4. **this.setState是异步的**![](https://github.com/necessityOVO/react-project/blob/main/Pictures\image-20201023160219506.png)
 5. redux的action和state都是传入组件的，通过this.props读取
 6. 使用nprogress要引入样式
 7. fullscreen库更改全屏的api toggle是异步的，返回promise，需要在then中setState新的全屏属性isFullScreen
