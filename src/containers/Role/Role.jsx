@@ -19,7 +19,7 @@ const treeData = [
   },
   {
     title: '商品',
-    key: 'product_about',
+    key: 'prod_about',
     children: [
       {
         title: '商品管理',

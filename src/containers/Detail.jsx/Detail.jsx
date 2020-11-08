@@ -8,7 +8,7 @@ const POP_PLACEMENT = 'left'
 
 const MyRow = function ({ title, content, direction = "horizon", ...restProps }) {
   
-  return <><Row>
+  return <><Row {...restProps}>
     <Col span={24}>
       <h3 style={{ fontWeight: 700, display: direction === "vertical" ? "block" : "inline-block", margin: "10px 20px 10px 0" }}>{title}:</h3><span dangerouslySetInnerHTML={{ __html: content }}></span>
     </Col>

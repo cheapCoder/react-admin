@@ -11,8 +11,12 @@ const validateRuler = [
   { pattern: /^\w+$/, message: '必须是英文、数组或下划线组成' }
 ]
 
+//公开路由，不用验证角色权限
+const pulicRoutes = ["login", "home"]
+
 
 export {
   validateRuler,
-  echartTheme
+  echartTheme,
+  pulicRoutes,
 }
