@@ -56,7 +56,6 @@ class Admin extends Component {
   }
 
   render() {
-    const { Footer } = Layout;
 
     return (
       <Layout className="admin" >
@@ -78,7 +77,7 @@ class Admin extends Component {
             </Switch>
           </div>
 
-          <Footer className="footer">developed by cheapCoder</Footer>
+          <Layout.Footer className="footer">developed by cheapCoder</Layout.Footer>
         </Layout>
       </Layout>
     )

@@ -71,7 +71,6 @@ class MySider extends Component {
       this.getHeaderName({ key: arr[arr.length - 1] })
     })
   }
-
   render() {
     const { collapsed } = this.state
     const keyArr = this.props.pathname.split('/')
@@ -80,6 +79,7 @@ class MySider extends Component {
     if (defaultSelectedKeys === "admin") {
       defaultSelectedKeys = "home"
     }
+
     return (<Layout.Sider
       breakpoint="lg"
       collapsedWidth="80"
@@ -96,7 +96,7 @@ class MySider extends Component {
 
       <Menu
         onClick={this.getHeaderName}
-        defaultSelectedKeys={defaultSelectedKeys}          //默认选中和打开的key都从路由中获取
+        selectedKeys={defaultSelectedKeys}          //默认选中和打开的key都从路由中获取
         defaultOpenKeys={keyArr.slice(2, keyArr.length - 1)}
         mode="inline"
       >
