@@ -28,9 +28,8 @@ class MySider extends Component {
     if (key === "changeproduct") {    //解决商品修改或添加页刷新后标题消失的bug
       key = "product";
     }
-    console.log(1);
+
     const result = this.state.flattenMenu.find((item) => item.key === key)
-    console.log(result);
     result && this.props.setHeaderName(result.title);
   }
 
