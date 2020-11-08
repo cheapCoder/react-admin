@@ -5,6 +5,7 @@ import { createFromIconfontCN } from '@ant-design/icons';
 import dayjs from 'dayjs'
 
 import { reqRoleList, reqAddRole, reqUpdateRoleAuth } from '../../api/index'
+// import { cancel } from '../../api/instance'
 import { saveRoleListAction, addRoleListAction, updateRoleListAction } from '../../redux/action'
 
 const PAGE_SIZE = 6;
@@ -156,19 +157,24 @@ class Role extends Component {
     this.setState({ setAuthVisible: false })
   }
 
-  onCheck = (checkedKeys) => {
+  onCheck = (checkedKeys) => {        //实现受控组件
     let newRole = Object.assign({}, this.state.currentRole, { menus: checkedKeys });
     this.setState({ currentRole: newRole })
   };
 
   componentDidMount() {
+    console.log("role");
     reqRoleList().then((res) => {     //请求角色列表
       res.status || this.props.saveRoleListAction(res.data);
     })
   }
 
+  // componentWillUnmount() {
+  //   cancel && cancel();
+  // }
+
   render() {
-    const { ModalOkText, AddRoleVisible, setAuthVisible, confirmLoading, currentRole, expandedKeys, checkedKeys } = this.state;
+    const { ModalOkText, AddRoleVisible, setAuthVisible, confirmLoading, currentRole } = this.state;
     const { roleList } = this.props;
 
     return (<Card
@@ -188,6 +194,7 @@ class Role extends Component {
         rowKey="_id"
         pagination={{ pageSize: PAGE_SIZE }}
       />
+
       <Modal                            //添加角色的模态框
         title="添加角色"
         visible={AddRoleVisible}
@@ -199,6 +206,7 @@ class Role extends Component {
       >
         <Input autoFocus placeholder="请输入角色名" ref={ref => this.roleInput = ref} />
       </Modal>
+
       <Modal                           //编辑角色权限的模态框
         title={`授权${currentRole.name}: `}
         centered

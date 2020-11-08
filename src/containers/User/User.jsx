@@ -132,6 +132,7 @@ class User extends Component {
   }
 
   componentDidMount() {
+    console.log("user");
     reqUserList().then((res) => {   //请求用户列表
       if (!res.status) {
         this.setState({ userList: res.data.users });

@@ -39,8 +39,6 @@ class MySider extends Component {
       let { children, title, key, icon } = item;
 
       if (!children) {    //没有children则为叶级菜单
-
-        // console.log(key, role.menus);
         if (username !== "admin" && !role.menus.includes(key)) {      //用户鉴权
           return null;
         }
@@ -50,13 +48,12 @@ class MySider extends Component {
         //   key,
         // }, title)
         return <Item icon={<LegacyIcon type={icon} />} key={key}><Link to={item.path}>{title}</Link></Item> //此写法已经过时!!!!
-
       } else {
         const child = this.recurMenu(children);
         if (child.every(item => item === null)) {         //判断子列表是否有菜单要显示，没有就不显示当前一级菜单
           return null;
         }
-
+        
         // return React.createElement(SubMenu, { key, icon: React.createElement(Icon[iconType]), title }, recurMenu(children))
         return <SubMenu key={key} icon={<LegacyIcon type={icon} />} title={title}>
           {child}
