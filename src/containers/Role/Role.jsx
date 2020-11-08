@@ -5,7 +5,7 @@ import { createFromIconfontCN } from '@ant-design/icons';
 import dayjs from 'dayjs'
 
 import { reqRoleList, reqAddRole, reqUpdateRoleAuth } from '../../api/index'
-import { cancel } from '../../api/instance'
+// import { cancel } from '../../api/instance'
 import { saveRoleListAction, addRoleListAction, updateRoleListAction } from '../../redux/action'
 
 const PAGE_SIZE = 6;
@@ -171,9 +171,9 @@ class Role extends Component {
     })
   }
 
-  componentWillUnmount() {
-    cancel && cancel();
-  }
+  // componentWillUnmount() {
+  //   cancel && cancel();
+  // }
 
   render() {
     const { ModalOkText, AddRoleVisible, setAuthVisible, confirmLoading, currentRole } = this.state;

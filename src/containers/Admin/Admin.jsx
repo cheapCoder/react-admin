@@ -19,7 +19,8 @@ import ChangeProduct from '../ChangeProduct/ChangeProduct'
 import './Admin.less';
 import { reqCategoryList, reqVerifyToken } from "../../api/index";
 import { changeIsLoginAction, saveCategoryAction } from '../../redux/action'
-import { pulicRoutes } from '../../configs/index'
+import { publicRoutes } from '../../configs/index'
+
 
 
 @connect(state => ({ user: state.user }), { changeIsLoginAction, saveCategoryAction })
@@ -28,14 +29,12 @@ class Admin extends Component {
     headerName: ""    //显示MyHeader组件标题
   }
 
- 
-
   componentDidMount() {
     const { user, history, location, changeIsLoginAction, saveCategoryAction } = this.props
 
     const arr = location.pathname.split("/")                // 判断当前路由地址用户是否有权限查看
     const lastPathname = arr[arr.length - 1]
-    if (!pulicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
+    if (user.userInfo.username !== "admin" && !publicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
       history.replace("/admin/home");
     }
 
@@ -57,7 +56,6 @@ class Admin extends Component {
   }
 
   render() {
-    const { Footer } = Layout;
 
     return (
       <Layout className="admin" >
@@ -79,7 +77,7 @@ class Admin extends Component {
             </Switch>
           </div>
 
-          <Footer className="footer">developed by cheapCoder</Footer>
+          <Layout.Footer className="footer">developed by cheapCoder</Layout.Footer>
         </Layout>
       </Layout>
     )

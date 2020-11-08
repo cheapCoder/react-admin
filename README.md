@@ -1,3 +1,17 @@
+# 介绍
+
+![](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190344312.png)
+
+![image-20201108190253666](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190253666.png)
+
+![image-20201108190401705](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190401705.png)
+
+![image-20201108190432388](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190432388.png)
+
+![image-20201108190538232](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190538232.png)
+
+![image-20201108190900951](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201108190900951.png)
+
 # React项目任务列表
 
 - [x] 使用create-react-app创建基于react脚手架应用,
@@ -81,11 +95,9 @@
 
 - [x] 角色路由组件的卡片，表格展示，增加角色按钮逻辑，权限设置逻辑和树形控件的引入，回显，添加menu菜单全选按钮
 
-- [ ] 不同角色的不同menu菜单显示
+- [ ] 不同角色的不同menu菜单显示，登陆权限验证
 
-- [ ] 利用echart实现charts页的pie、line、bar表
-
-- [ ] Header组件交互--天气预报，请求的是百度接口，使用了jsonp库发送请求
+- [x] 利用echart实现charts页的pie、line、bar表
 
 - [ ] 优化组件数据配置，将可变数据放到最前
 
@@ -108,11 +120,15 @@
 
 
 
-# 所遇问题及解决
+# 所遇问题及解决方式
 
-- [ ] CSS: filter: blur的白边问题
+- [x] CSS: filter: blur的白边问题
 
-- [ ] 登陆页的背景在F12打开控制台并显示在下方后，图片高度减少并出现滚动条
+  > ​	admin使用对footer使用定位后就没了？？？
+
+- [x] 登陆页的背景在F12打开控制台并显示在下方后，图片高度减少并出现滚动条
+
+  > ​		admin使用对footer使用定位后就没了？？？
 
 - [ ] 自己封装的axios请求拦截器每次都会带token发送check_token请求，应该额外判断这种情况并中断axios请求
 
@@ -142,7 +158,7 @@
   >
   > ![image-20201030091112297](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201030091112297.png)
   >
-  > 期待更优雅的方案！
+  > **期待更优雅的方案！**
 
 - [x] 首次加载路由为admin导致无默认选中菜单的bug
 
@@ -152,13 +168,17 @@
 
   > ​		给footer组件添加绝对定位，**为什么相对定位不行？**
 
-- [ ] 在组件外定义无联系的函数方法是否有害于组件本身，如mySider内的flatten函数
+- [x] 在组件外定义无联系的函数方法是否有害于组件本身，如mySider内的flatten函数
+
+  > ​		已经移动当`utils`文件夹作为工具函数
 
 - [x] 每次修改category列表数据显示都会翻转(reverse)
 
   > ​	使用arr.reverse会修改原数组，用三点运算符复制一份在reverse
 
-- [ ] **跳转至changeProduct路由后header的name标题仍然是“商品管理”**，且刷新消失
+- [x] **跳转至changeProduct路由后header的name标题仍然是“商品管理”**，且刷新后会消失
+
+  > ​		单独判断，changProduct仍属于product路由，key为"changeProduct"则修改为"product"
 
 - [x] antd库Form的initialValue设置无效
 
@@ -186,15 +206,29 @@
 
   > ​		添加state属性currentPage，通过antd的pagination的current属性绑定currentPage
 
-- [ ] category, role, user页的`添加`按钮应该一显示就自动聚焦, 且加入重复自动清除Input的值，form里的应该用setFieldValues来
+- [ ] category, role, user页的`添加`按钮应该一显示就自动聚焦, 且加入重复自动清除Input的值
 
-- [ ] **多次点击不同用户号的`修改`按钮显示的用户信息有延迟，使用`setState`的回调函数也不行，能用forceUpdate吗？有可能是antd本身的问题?**
+- [x] **多次点击不同用户号的`修改`按钮显示的用户信息有延迟，使用`setState`的回调函数也不行
 
-- [ ] 
+  > ​		form的值修改不能用setState，要用setFieldValue，
+  >
+  > ![image-20201107224436951](C:\Users\10615\AppData\Roaming\Typora\typora-user-images\image-20201107224436951.png)
 
-- [ ] 
+- [x] **通过动态渲染左侧导航栏来实现权限验证不可取，可能会通过地址栏地址跳转**
 
-  
+  > react路由鉴权学习：https://juejin.im/post/6844903924441284615#heading-2
+  >
+  > 通过Admin组件判断当前路由地址是否有权限访问
+
+- [ ] 无User路由组件访问权限的用户地址访问时react报内存泄漏的错误
+
+  > 原因：进入user路由，挂载后用户列表请求还未完成
+  >
+  > 解决：（**此方法不行，统一添加无效**！~~在请求拦截器里统一添加axios的cancelToken，并暴露出cancel函数，在user，role组件卸载时执行，~~~~也可写成高阶组件(HOC)形式）~~
+
+- [x] 无权限页自动跳转到home页时`home`的菜单不选中
+
+  > ​		MySider组件页面跳转不会重新挂载，将menus的defaultSelectedKeys参数改成selectedKeys
 
 # 踩坑记录
 
@@ -208,9 +242,11 @@
 8. antd会"干扰"css的color属性继承，不要给给父元素加color而是直接加在当前元素上
 9. antd 4.获取form字段通过在form元素上添加ref获取，[参考博客地址](https://anandzhang.com/posts/frontend/10)
 10. react-router传参的方式：
-    1. query
-    2. params
-    3. state
+    > 1. query
+    > 2. params
+    > 3. state
 11. antd的Form组件[隐藏必填表单会出现的星号](https://github.com/ant-design/ant-design-pro/issues/2044)：`hideRequiredMark： 隐藏所有表单项的必选标记 | Boolean | false`
 12. 后端只有对添加商品时的重名检查，而更新商品时则没有重名检查
 13. `arr.prototype.splice()`返回被删除元素的数组而不是修改后的数组
+14. axios的cancelToken是单独一项配置，不在header里
+
