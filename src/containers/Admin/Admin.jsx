@@ -28,16 +28,7 @@ class Admin extends Component {
     headerName: ""    //显示MyHeader组件标题
   }
 
-  static getDerivedStateFromProps(nextProps, preState) {
-    const { user, history, location } = nextProps
-
-    const arr = location.pathname.split("/")                // 判断当前路由地址用户是否有权限查看
-    const lastPathname = arr[arr.length - 1]
-    if (!pulicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
-      history.replace("/admin/home");
-    }
-    return null;
-  }
+ 
 
   componentDidMount() {
     const { user, history, location, changeIsLoginAction, saveCategoryAction } = this.props
