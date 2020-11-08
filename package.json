@@ -17,6 +17,7 @@
 		"echarts": "^4.9.0",
 		"echarts-for-react": "^2.0.16",
 		"html-to-draftjs": "^1.5.0",
+		"lodash": "^4.17.20",
 		"nprogress": "^0.2.0",
 		"react": "^16.14.0",
 		"react-dom": "^16.14.0",

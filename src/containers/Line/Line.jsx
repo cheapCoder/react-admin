@@ -36,14 +36,10 @@ class Line extends Component {
   }
 
   render() {
-    return (
-      <div>
-        (<div id="line" style={{ width: "70vw", height: "60vh", margin: "50px auto" }}>
-          <ReactEcharts theme="heng" style={{ width: "70vw", height: "60vh" }} option={this.getOption()} />
-        </div>);
 
-      </div>
-    )
+    return (<div id="line" style={{ width: "70vw", height: "60vh", margin: "50px auto" }}>
+      <ReactEcharts theme="heng" style={{ width: "70vw", height: "60vh" }} option={this.getOption()} />
+    </div>)
   }
 }
 export default Line

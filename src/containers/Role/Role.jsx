@@ -19,7 +19,7 @@ const treeData = [
   },
   {
     title: '商品',
-    key: 'product_about',
+    key: 'prod_about',
     children: [
       {
         title: '商品管理',
@@ -147,6 +147,7 @@ class Role extends Component {
   // 设置权限点击确认
   handleSetAuthOk = async () => {
     const { _id, menus } = this.state.currentRole
+    console.log(menus);
     const result = await reqUpdateRoleAuth({ _id, menus, auth_time: Date.now(), auth_name: this.props.user.userInfo.username });
     notification.success({
       description: "权限已更新",
@@ -156,8 +157,9 @@ class Role extends Component {
     this.setState({ setAuthVisible: false })
   }
 
-  onCheck = (checkedKeys) => {
+  onCheck = (checkedKeys) => {        //实现受控组件
     let newRole = Object.assign({}, this.state.currentRole, { menus: checkedKeys });
+    console.log(newRole.menus);
     this.setState({ currentRole: newRole })
   };
 
@@ -168,7 +170,7 @@ class Role extends Component {
   }
 
   render() {
-    const { ModalOkText, AddRoleVisible, setAuthVisible, confirmLoading, currentRole, expandedKeys, checkedKeys } = this.state;
+    const { ModalOkText, AddRoleVisible, setAuthVisible, confirmLoading, currentRole } = this.state;
     const { roleList } = this.props;
 
     return (<Card

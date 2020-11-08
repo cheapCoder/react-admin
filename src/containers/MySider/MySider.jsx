@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Menu, Layout } from 'antd'
+import { Link } from 'react-router-dom'
+import { Icon as LegacyIcon } from '@ant-design/compatible';    //有待商榷！！！
+import flattenDeep from 'lodash/flattenDeep'
 
 import reactLogo from "./images/react.png"
 import './sider.less'
-import menu from './js/menu-config'
-import { flatten, recurMenu } from '../../utils/index'
+import menus from './js/menu-config'
 
+const { SubMenu, Item } = Menu;
 
+@connect(state => ({ userInfo: state.user.userInfo }))
 class MySider extends Component {
   state = {
     collapsed: false,
     flattenMenu: []
   }
-
 
   handleCollapse = (collapsed) => {
     collapsed && (this.systemName.style.display = this.state.collapsed ? "inline" : "none")
@@ -20,23 +24,53 @@ class MySider extends Component {
   }
 
   getHeaderName = ({ key }) => {
-    if (key === "changeproduct") {
+    if (key === "changeproduct") {    //解决商品修改或添加页刷新后标题消失的bug
       key = "product";
     }
-    console.log(key, this.state.flattenMenu);
     const result = this.state.flattenMenu.find((item) => item.key === key)
-    console.log(result);
     result && this.props.setHeaderName(result.title);
   }
 
+
+  recurMenu = (MenuArr) => {     // 递归数组返回菜单 
+    const { username, role } = this.props.userInfo;
+    return MenuArr.map((item) => {
+      let { children, title, key, icon } = item;
+
+      if (!children) {    //没有children则为叶级菜单
+
+        // console.log(key, role.menus);
+        if (username !== "admin" && !role.menus.includes(key)) {      //用户鉴权
+          return null;
+        }
+
+        // return React.createElement(Item, {
+        //   icon: React.createElement(Icon[iconType]),
+        //   key,
+        // }, title)
+        return <Item icon={<LegacyIcon type={icon} />} key={key}><Link to={item.path}>{title}</Link></Item> //此写法已经过时!!!!
+
+      } else {
+        const child = this.recurMenu(children);
+        if (child.every(item => item === null)) {         //判断子列表是否有菜单要显示，没有就不显示当前一级菜单
+          return null;
+        }
+
+        // return React.createElement(SubMenu, { key, icon: React.createElement(Icon[iconType]), title }, recurMenu(children))
+        return <SubMenu key={key} icon={<LegacyIcon type={icon} />} title={title}>
+          {child}
+        </SubMenu>
+      }
+    })
+  }
+
   componentDidMount() {
-    // console.log(flatten(menu));
-    this.setState({ flattenMenu: flatten(menu) }, () => {    //扁平化菜单数组
+    this.setState({ flattenMenu: flattenDeep(menus) }, () => {    //扁平化菜单数组
       const keyArr = this.props.pathname.split('/');
-      // console.log(keyArr[keyArr.length - 1]);
       this.getHeaderName({ key: keyArr[keyArr.length - 1] });
     });
   }
+
 
   render() {
     const { collapsed } = this.state
@@ -66,7 +100,7 @@ class MySider extends Component {
         defaultOpenKeys={keyArr.slice(2, keyArr.length - 1)}
         mode="inline"
       >
-        {recurMenu(menu)}
+        {this.recurMenu(menus)}
       </Menu>
     </Layout.Sider>);
   }
