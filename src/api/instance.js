@@ -11,6 +11,11 @@ const instance = axios.create({
   // timeout: 5000
 })
 
+let cancel = null;
+const cancelToken = new axios.CancelToken(c => {
+  cancel = c;
+});
+
 // 拦截器
 
 // 拦截器封装个人理念：
@@ -22,6 +27,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   NProgress.start();
+  config.cancelToken = cancelToken      //统一添加取消请求的标识
 
   if (config.method.toLowerCase() === "post") {   //统一将post请求的json数据转换为urlencoded格式
     config.data = qs.stringify(config.data)
@@ -42,7 +48,7 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use((res) => {
   NProgress.done()
-  const {  status, msg } = res.data;
+  const { status, msg } = res.data;
 
   // if (status) {           //统一处理请求成功但后台拒绝的情况
   //   message.error(msg, 1)
@@ -58,12 +64,12 @@ instance.interceptors.response.use((res) => {
   if (err.message === "Request failed with status code 401") {    //用户token验证不通过
     localStorage.removeItem("userToken");
     localStorage.removeItem("userInfo");
-    
+
     return Promise.resolve({ status: 1, err })  //为了统一返回成功promise原则
   }
 
-  message.error(err.message, 1);     //网络请求失败
-  return new Promise(() => {})
+  // message.error(err.message, 1);     //网络请求失败
+  return new Promise(() => { })
 })
-
+export { cancel }
 export default instance;

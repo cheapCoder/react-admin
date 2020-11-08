@@ -7,7 +7,7 @@ import flattenDeep from 'lodash/flattenDeep'
 
 import reactLogo from "./images/react.png"
 import './sider.less'
-import menus from './js/menu-config'
+import menus from '../../configs/menu-config'
 
 const { SubMenu, Item } = Menu;
 

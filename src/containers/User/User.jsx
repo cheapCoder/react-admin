@@ -5,6 +5,7 @@ import { createFromIconfontCN, LoadingOutlined, WarningOutlined } from '@ant-des
 import dayjs from 'dayjs'
 
 import { reqUserList, reqAddUser, reqDeleteUser, reqUpdateUser } from '../../api/index'
+import {cancel} from '../../api/instance'
 import { saveRoleListAction } from '../../redux/action'
 import { validateRuler as loginValidateRuler } from '../../configs/index'
 
@@ -21,6 +22,7 @@ const validateMessages = {        //添加用户表单验证反馈信息
     number: '${label}必须是数字',
   }
 };
+
 
 
 @connect(({ roleList }) => ({ roleList }), { saveRoleListAction })
@@ -132,12 +134,17 @@ class User extends Component {
   }
 
   componentDidMount() {
+    console.log("user");
     reqUserList().then((res) => {   //请求用户列表
       if (!res.status) {
         this.setState({ userList: res.data.users });
         this.props.saveRoleListAction(res.data.roles);
       }
     })
+  }
+
+  componentWillUnmount() {
+    cancel && cancel();
   }
 
   render() {

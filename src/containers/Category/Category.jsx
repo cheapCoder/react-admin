@@ -145,13 +145,7 @@ class Category extends React.Component {
     });
     this.categoryInput.state.value = ""
   };
-
-  componentDidMount() {
-    // console.log(this);
-    // console.log(this.categoryInput);
-    // this.categoryInput.focus(); 
-  }
-
+  
   render() {
     const { visible, confirmLoading, ModalOkText } = this.state;
     const reverseCategory = [...this.props.category].reverse();

@@ -6,14 +6,14 @@ import { Redirect, Route, Switch } from 'react-router';
 import MyHeader from '../MyHeader/MyHeader';
 import MySider from "../MySider/MySider";
 
-import Home from '../Home/Home';
+import Home from '../../components/Home/Home';
 import Category from '../Category/Category';
 import Product from '../Product/Product';
 import User from '../User/User';
 import Role from '../Role/Role';
-import Bar from '../Bar/Bar';
-import Line from '../Line/Line';
-import Pie from '../Pie/Pie';
+import Bar from '../../components/Bar/Bar';
+import Line from '../../components/Line/Line';
+import Pie from '../../components/Pie/Pie';
 import ChangeProduct from '../ChangeProduct/ChangeProduct'
 
 import './Admin.less';
@@ -28,7 +28,18 @@ class Admin extends Component {
     headerName: ""    //显示MyHeader组件标题
   }
 
-  async componentDidMount() {
+  static getDerivedStateFromProps(nextProps, preState) {
+    const { user, history, location } = nextProps
+
+    const arr = location.pathname.split("/")                // 判断当前路由地址用户是否有权限查看
+    const lastPathname = arr[arr.length - 1]
+    if (!pulicRoutes.includes(lastPathname) && !user.userInfo.role.menus.includes(lastPathname)) {
+      history.replace("/admin/home");
+    }
+    return null;
+  }
+
+  componentDidMount() {
     const { user, history, location, changeIsLoginAction, saveCategoryAction } = this.props
 
     const arr = location.pathname.split("/")                // 判断当前路由地址用户是否有权限查看
@@ -41,8 +52,6 @@ class Admin extends Component {
     user.isLogin || reqVerifyToken().then((res) => {
       if (res && !res.status) {   //用户信息检查
         changeIsLoginAction() //单独修改isLogin为true
-
-
 
         // 提前获取分类列表，并保存到redux中
         reqCategoryList().then(({ data: listData }) => {

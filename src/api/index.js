@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import instance from './instance'
 
 // 传参规定：参数多于三个则要求传递对象
@@ -51,7 +53,7 @@ export const reqAddRole = (roleName) => instance.post("/manage/role/add", { role
 export const reqUpdateRoleAuth = ({ _id, menus, auth_time, auth_name }) => instance.post("/manage/role/update", { _id, menus, auth_time, auth_name })
 
 //获取用户列表
-export const reqUserList = () => instance.get("/manage/user/list")
+export const reqUserList = () => instance.get("/manage/user/list", )
 
 //添加用户
 export const reqAddUser = ({ username, password, phone, email, role_id }) => instance.post("/manage/user/add", { username, password, phone, email, role_id })
