@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>refs与事件处理</title>
+	</head>
+	<body>
+		<br />
+		<div id="example"></div>
+
+		<!--引入react核心库-->
+		<script
+			type="text/javascript"
+			src="../js/react.development.js"
+		></script>
+		<!--引入操作react操作DOM库-->
+		<script
+			type="text/javascript"
+			src="../js/react-dom.development.js"
+		></script>
+		<!--引入babel-->
+		<script type="text/javascript" src="../js/babel.min.js"></script>
+
+		<script type="text/babel">
+			// 此refs写法已经废弃
+			// class MyComponent extends React.Component {
+			// 	clickHandler = (e) => {
+			// 		console.log(e.target.value);
+			// 	};
+
+			// 	blurHandler = () => {
+			// 		console.log(this.refs.blurIt.value);
+			// 	};
+
+			// 	render() {
+			// 		return (
+			// 			<div>
+			// 				<input type="text" ref="clickIt" />
+			// 				<button onClick={this.clickHandler}>
+			// 					click it
+			// 				</button>
+			// 				<input
+			// 					type="text"
+			// 					placeholder="can click it"
+			// 					onBlur={this.blurHandler}
+			// 					ref="blurIt"
+			// 				/>
+			// 			</div>
+			// 		);
+			// 	}
+      // }
+
+      // // 回调refs的使用
+			// class MyComponent extends React.Component {
+			// 	clickHandler = (e) => {
+			// 		console.log(this.clickit.value);
+			// 	};
+
+			// 	blurHandler = () => {
+			// 		console.log(this.blurit.value);
+			// 	};
+
+			// 	render() {
+			// 		return (              // 回调refs
+			// 			<div>
+			// 				<input type="text" ref={input => this.clickit = input} />    
+			// 				<button onClick={this.clickHandler}>
+			// 					click it
+			// 				</button>
+			// 				<input
+			// 					type="text"
+			// 					placeholder="can click it"
+			// 					onBlur={this.blurHandler}
+			// 					ref={input => this.blurit = input}   
+			// 				/>
+			// 			</div>
+			// 		);
+			// 	}
+      // }
+      
+      // React.createRef的形式
+			class MyComponent extends React.Component {
+        constructor() {
+          super();
+          this.clickit = React.createRef()
+          this.blurit = React.createRef()
+        }
+				clickHandler = (e) => {
+					console.log(this.clickit.current.value);
+				};
+
+				blurHandler = () => {
+					console.log(this.blurit.current.value);
+				};
+
+				render() {
+					return (              // 回调refs
+						<div>
+							<input type="text" ref={this.clickit} />    
+							<button onClick={this.clickHandler}>
+								click it
+							</button>
+							<input
+								type="text"
+								placeholder="can click it"
+								onBlur={this.blurHandler}
+								ref={this.blurit}   
+							/>
+						</div>
+					);
+				}
+			}
+
+			ReactDOM.render(
+				<MyComponent />,
+				document.getElementById("example")
+			);
+		</script>
+	</body>
+</html>

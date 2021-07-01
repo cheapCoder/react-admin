@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="test"></div>
+
+		<script src="../js/react.development.js"></script>
+		<script src="../js/react-dom.development.js"></script>
+		<script src="../js/babel.min.js"></script>
+  
+		<script type="text/babel">
+			// 法二
+			const vDOM = <h1>hello react</h1>;
+			ReactDOM.render(vDOM, document.getElementById("test"));
+		</script>
+	</body>
+</html>

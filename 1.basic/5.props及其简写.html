@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>props</title>
+	</head>
+	<body>
+		<div id="example1"></div>
+		<div id="example2"></div>
+
+		<!--引入react核心库-->
+		<script
+			type="text/javascript"
+			src="../js/react.development.js"
+		></script>
+		<!--引入操作react操作DOM库-->
+		<script
+			type="text/javascript"
+			src="../js/react-dom.development.js"
+		></script>
+		<!--引入babel-->
+		<script type="text/javascript" src="../js/babel.min.js"></script>
+		<!--引入prop-types，用于限制传递标签属性的：类型、必要性-->
+		<script type="text/javascript" src="../js/prop-types.js"></script>
+
+		<script type="text/babel">
+			class Person extends React.Component {
+				static defaultTypes = {
+					sex: "at",
+					age: 20,
+				};
+				static propTypes = {
+					name: PropTypes.string.isRequired,
+					age: PropTypes.number,
+					sex: PropTypes.string,
+				};
+				render() {
+					console.log(this);
+					return (
+						<ul>
+							<li>姓名：{this.props.name}</li>
+							<li>性别：{this.props.age}</li>
+							<li>年龄：{this.props.sex}</li>
+						</ul>
+					);
+				}
+			}
+
+			let person = {
+				name: "heng",
+				age: 22,
+				sex: "male",
+			};
+			ReactDOM.render(
+				<Person {...person} />,  // react可以对对象解构
+				document.querySelector("#example1")
+			);
+			ReactDOM.render(<Person />, document.querySelector("#example2"));
+		</script>
+	</body>
+</html>

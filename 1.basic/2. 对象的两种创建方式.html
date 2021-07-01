@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			.red {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="atguigu"></div>
+		<div id="ATGUIGU"></div>
+
+		<div id="train"></div>
+		<script src="../js/react.development.js"></script>
+		<script src="../js/react-dom.development.js"></script>
+		<script src="../js/babel.min.js"></script>
+
+		<script type="text/javascript">
+			// 法一
+			let id = "atGUiGu",
+				content = "Hello React";
+			const vDOM1 = React.createElement(
+				"h2",
+				{ id: "what" },
+				React.createElement("span", {}, content.toUpperCase())
+			);
+			ReactDOM.render(vDOM1, document.getElementById(id.toUpperCase()));
+		</script>
+		<script type="text/babel">
+			// 法二
+			const vDOM2 = (
+				<h3>
+					<span className="red" id="show">
+						{content.toLowerCase()}
+					</span>
+				</h3>
+			);
+			ReactDOM.render(vDOM2, document.getElementById(id.toLowerCase()));
+
+			// jsx练习
+			let data = ["Angular", "React", "vue", "jQuery"]; //数据的数组
+			let vDOM = (
+				<div>
+					<h1>这是第一次练习</h1>
+					<ul>
+						{data.map((item, index) => {
+							return <li key={index}>{item}</li>;
+						})}
+					</ul>
+				</div>
+			);
+			ReactDOM.render(vDOM, document.getElementById("train"));
+		</script>
+	</body>
+</html>
